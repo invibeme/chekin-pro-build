@@ -3080,14 +3080,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
 /* harmony import */ var _Routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Routes */ "./src/Routes.tsx");
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! history */ "./node_modules/history/index.js");
 /* harmony import */ var _context_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./context/index */ "./src/context/index.tsx");
 
 
 
-
-
-var browserHistory = (0,history__WEBPACK_IMPORTED_MODULE_4__.createBrowserHistory)();
+ // const browserHistory = createBrowserHistory();
 
 function App() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_context_index__WEBPACK_IMPORTED_MODULE_3__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Routes__WEBPACK_IMPORTED_MODULE_2__.default, null));
@@ -5340,6 +5337,407 @@ var ErrorMessage = styled_components__WEBPACK_IMPORTED_MODULE_2__.default.div(_t
 
 /***/ }),
 
+/***/ "./src/components/common/FieldPhoneInput/PhoneInput.tsx":
+/*!**************************************************************!*\
+  !*** ./src/components/common/FieldPhoneInput/PhoneInput.tsx ***!
+  \**************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "defaultProps": function() { return /* binding */ defaultProps; },
+/* harmony export */   "PhoneInput": function() { return /* binding */ PhoneInput; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var string_similarity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! string-similarity */ "./node_modules/string-similarity/src/index.js");
+/* harmony import */ var string_similarity__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(string_similarity__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _hooks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../hooks */ "./src/hooks/index.ts");
+/* harmony import */ var _utils_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/hooks */ "./src/utils/hooks.tsx");
+/* harmony import */ var _styled_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../styled/common */ "./src/styled/common.ts");
+/* harmony import */ var _assets_icons_search_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../assets/icons/search.svg */ "./src/assets/icons/search.svg");
+/* harmony import */ var _assets_icons_search_svg__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_assets_icons_search_svg__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _FieldInput__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../FieldInput */ "./src/components/common/FieldInput/index.ts");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Loader */ "./src/components/common/Loader/index.ts");
+/* harmony import */ var _styled__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styled */ "./src/components/common/FieldPhoneInput/styled.ts");
+ // import {useTranslation} from 'react-i18next';
+
+
+
+
+
+
+
+
+
+var DEFAULT_OPTION = {
+  code: "+00",
+  name: ""
+};
+
+function getPhoneCodesAsOptions(locations) {
+  var _locations;
+
+  if (locations === void 0) {
+    locations = [];
+  }
+
+  if (!locations || !Array.isArray(locations)) {
+    return [];
+  }
+
+  return (_locations = locations) == null ? void 0 : _locations.map(function (location) {
+    var _location$country;
+
+    return {
+      name: location == null ? void 0 : (_location$country = location.country) == null ? void 0 : _location$country.name,
+      code: "+" + location.phone_code
+    };
+  });
+}
+
+var defaultProps = {
+  onChange: function onChange() {},
+  name: "",
+  defaultInputValue: "",
+  defaultCode: "",
+  placeholder: "",
+  disabled: false,
+  error: ""
+};
+var PhoneInput = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().forwardRef(function (_ref, ref) {
+  var onChange = _ref.onChange,
+      name = _ref.name,
+      label = _ref.label,
+      disabled = _ref.disabled,
+      defaultCode = _ref.defaultCode,
+      defaultInputValue = _ref.defaultInputValue,
+      placeholder = _ref.placeholder,
+      value = _ref.value,
+      error = _ref.error;
+  // const {t} = useTranslation();
+  var searchInputRef = react__WEBPACK_IMPORTED_MODULE_0___default().useRef(null);
+  var wrapperRef = react__WEBPACK_IMPORTED_MODULE_0___default().useRef(null);
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+      isMenuOpen = _React$useState[0],
+      setIsMenuOpen = _React$useState[1];
+
+  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+      searchQuery = _React$useState2[0],
+      setSearchQuery = _React$useState2[1];
+
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState([]),
+      queriedOptions = _React$useState3[0],
+      setQueriedOptions = _React$useState3[1];
+
+  var _React$useState4 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(DEFAULT_OPTION),
+      selectedOption = _React$useState4[0],
+      setSelectedOption = _React$useState4[1];
+
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(defaultInputValue || ""),
+      inputValue = _React$useState5[0],
+      setInputValue = _React$useState5[1];
+
+  var _useErrorModal = (0,_utils_hooks__WEBPACK_IMPORTED_MODULE_3__.useErrorModal)(),
+      ErrorModal = _useErrorModal.ErrorModal,
+      displayError = _useErrorModal.displayError;
+
+  var _useFetchLocations = (0,_hooks__WEBPACK_IMPORTED_MODULE_2__.useFetchLocations)({
+    params: "ordering=name&old_mode=1&phone_code=1"
+  }),
+      phoneCodes = _useFetchLocations.locations,
+      isLoadingLocations = _useFetchLocations.isLoadingLocations,
+      revalidateLocations = _useFetchLocations.revalidateLocations,
+      isError = _useFetchLocations.isError,
+      phoneCodesError = _useFetchLocations.error;
+
+  react__WEBPACK_IMPORTED_MODULE_0___default().useImperativeHandle(ref, function () {
+    return {
+      code: selectedOption.code,
+      number: inputValue
+    };
+  }, [selectedOption.code, inputValue]);
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    setInputValue(defaultInputValue || "");
+  }, [defaultInputValue]);
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    if (phoneCodesError) {
+      displayError(phoneCodesError);
+    }
+  }, [phoneCodesError, displayError]);
+  var phoneCodesOptions = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
+    if (!phoneCodes) {
+      return [];
+    }
+
+    return getPhoneCodesAsOptions(phoneCodes == null ? void 0 : phoneCodes.data);
+  }, [phoneCodes]);
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    if (defaultCode && phoneCodesOptions != null && phoneCodesOptions.length) {
+      var option = phoneCodesOptions.find(function (c) {
+        return (c == null ? void 0 : c.code) === defaultCode;
+      });
+      option && setSelectedOption(option);
+    }
+  }, [defaultCode, phoneCodesOptions]);
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    if (value === null) {
+      setInputValue("");
+      setSelectedOption(DEFAULT_OPTION);
+    }
+  }, [value]);
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    if (isMenuOpen) {
+      var _searchInputRef$curre;
+
+      (_searchInputRef$curre = searchInputRef.current) == null ? void 0 : _searchInputRef$curre.focus();
+    } else {
+      setSearchQuery("");
+    }
+  }, [isMenuOpen]);
+  var closeMenu = react__WEBPACK_IMPORTED_MODULE_0___default().useCallback(function () {
+    setIsMenuOpen(false);
+  }, []);
+  (0,_utils_hooks__WEBPACK_IMPORTED_MODULE_3__.useOutsideClick)(wrapperRef, closeMenu);
+
+  var toggleAreCountryCodesExpanded = function toggleAreCountryCodesExpanded() {
+    setIsMenuOpen(function (prevState) {
+      return !prevState;
+    });
+  };
+
+  var handleSearchInputChange = function handleSearchInputChange(event) {
+    var target = event.target;
+    setSearchQuery(target.value);
+    getAndSetQueriedOptions(target.value);
+  };
+
+  var handleCountryCodeChange = react__WEBPACK_IMPORTED_MODULE_0___default().useCallback(function (option) {
+    setSelectedOption(option);
+    setIsMenuOpen(false);
+
+    if (!inputValue) {
+      onChange("", name);
+      return;
+    }
+
+    var nextValue = "" + option.code + inputValue;
+    onChange(nextValue, name);
+  }, [inputValue, name, onChange]);
+
+  var handleInputChange = function handleInputChange(event) {
+    var target = event.target;
+    setInputValue(target.value);
+
+    if (!target.value || selectedOption.code === DEFAULT_OPTION.code) {
+      onChange("", name);
+      return;
+    }
+
+    var nextValue = "" + selectedOption.code + target.value;
+    onChange(nextValue, name);
+  };
+
+  var getQueriedOptions = function getQueriedOptions(query) {
+    if (query === void 0) {
+      query = "";
+    }
+
+    return phoneCodesOptions.filter(function (option) {
+      var _option$code;
+
+      return option.name.toLowerCase().startsWith(query.toLowerCase()) || ((_option$code = option.code) == null ? void 0 : _option$code.includes(query.toLowerCase()));
+    }).sort(function (a, b) {
+      var comparingValue = a.name.toLowerCase().startsWith(query.toLowerCase()) ? "name" : "code";
+      var firstSimilarity = (0,string_similarity__WEBPACK_IMPORTED_MODULE_1__.compareTwoStrings)(query, a[comparingValue]);
+      var secondSimilarity = (0,string_similarity__WEBPACK_IMPORTED_MODULE_1__.compareTwoStrings)(query, b[comparingValue]);
+
+      if (firstSimilarity > secondSimilarity) {
+        return -1;
+      }
+
+      if (firstSimilarity < secondSimilarity) {
+        return 1;
+      }
+
+      return 0;
+    });
+  };
+
+  var getAndSetQueriedOptions = function getAndSetQueriedOptions(query) {
+    if (query === void 0) {
+      query = "";
+    }
+
+    var nextQueriedOptions = getQueriedOptions(query);
+    setQueriedOptions(nextQueriedOptions);
+  };
+
+  var renderMenuOptions = react__WEBPACK_IMPORTED_MODULE_0___default().useCallback(function (options) {
+    if (options === void 0) {
+      options = [];
+    }
+
+    return options.map(function (option, index) {
+      var isSelected = option.code === selectedOption.code;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.OptionWrapper, {
+        onClick: function onClick() {
+          return handleCountryCodeChange(option);
+        },
+        key: index
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.Option, {
+        selected: isSelected
+      }, option == null ? void 0 : option.name, " ", option == null ? void 0 : option.code));
+    });
+  }, [handleCountryCodeChange, selectedOption.code]);
+  var renderOptions = react__WEBPACK_IMPORTED_MODULE_0___default().useCallback(function () {
+    if (searchQuery) {
+      if (queriedOptions.length) {
+        return renderMenuOptions(queriedOptions);
+      }
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.EmptyOption, null, "no_results");
+    }
+
+    return renderMenuOptions(phoneCodesOptions);
+  }, [phoneCodesOptions, queriedOptions, searchQuery, renderMenuOptions]);
+
+  var gettest = function gettest(id) {
+    return id === "s" ? true : false;
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ErrorModal, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.Wrapper, {
+    error: error
+  }, isLoadingLocations && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.LoaderWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Loader__WEBPACK_IMPORTED_MODULE_7__.default, {
+    height: 18,
+    width: 18
+  })), isError && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.RequestErrorMessage, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    ref: wrapperRef
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.SelectedCountryCodeContainer, {
+    onClick: toggleAreCountryCodesExpanded,
+    disabled: disabled,
+    isEmpty: selectedOption.code === DEFAULT_OPTION.code,
+    error: error,
+    type: "button"
+  }, selectedOption.code, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.DisplayIcon, {
+    shouldRotate: isMenuOpen
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.Menu, {
+    open: isMenuOpen
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.InputRelativeWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.SearchInput, {
+    onChange: handleSearchInputChange,
+    value: searchQuery,
+    placeholder: "search",
+    ref: searchInputRef,
+    inputMode: "search"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.SearchIcon, {
+    src: (_assets_icons_search_svg__WEBPACK_IMPORTED_MODULE_5___default()),
+    alt: "Magnifier"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.Divider, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_8__.CountryCodesContainer, null, renderOptions()))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_FieldInput__WEBPACK_IMPORTED_MODULE_6__.default, {
+    onChange: handleInputChange,
+    type: "number",
+    label: label,
+    disabled: disabled,
+    value: inputValue,
+    placeholder: placeholder,
+    inputMode: "tel",
+    "aria-label": name
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_4__.ErrorMessage, null, error))));
+});
+PhoneInput.defaultProps = defaultProps;
+
+
+/***/ }),
+
+/***/ "./src/components/common/FieldPhoneInput/index.ts":
+/*!********************************************************!*\
+  !*** ./src/components/common/FieldPhoneInput/index.ts ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* reexport safe */ _PhoneInput__WEBPACK_IMPORTED_MODULE_0__.PhoneInput; }
+/* harmony export */ });
+/* harmony import */ var _PhoneInput__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhoneInput */ "./src/components/common/FieldPhoneInput/PhoneInput.tsx");
+
+
+/***/ }),
+
+/***/ "./src/components/common/FieldPhoneInput/styled.ts":
+/*!*********************************************************!*\
+  !*** ./src/components/common/FieldPhoneInput/styled.ts ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SelectedCountryCodeContainer": function() { return /* binding */ SelectedCountryCodeContainer; },
+/* harmony export */   "Test": function() { return /* binding */ Test; },
+/* harmony export */   "Wrapper": function() { return /* binding */ Wrapper; },
+/* harmony export */   "CountryCodesContainer": function() { return /* binding */ CountryCodesContainer; },
+/* harmony export */   "DisplayIcon": function() { return /* binding */ DisplayIcon; },
+/* harmony export */   "Menu": function() { return /* binding */ Menu; },
+/* harmony export */   "SearchIcon": function() { return /* binding */ SearchIcon; },
+/* harmony export */   "SearchInput": function() { return /* binding */ SearchInput; },
+/* harmony export */   "InputRelativeWrapper": function() { return /* binding */ InputRelativeWrapper; },
+/* harmony export */   "Divider": function() { return /* binding */ Divider; },
+/* harmony export */   "Option": function() { return /* binding */ Option; },
+/* harmony export */   "OptionWrapper": function() { return /* binding */ OptionWrapper; },
+/* harmony export */   "LoaderWrapper": function() { return /* binding */ LoaderWrapper; },
+/* harmony export */   "RequestErrorMessage": function() { return /* binding */ RequestErrorMessage; },
+/* harmony export */   "EmptyOption": function() { return /* binding */ EmptyOption; }
+/* harmony export */ });
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _FieldSelect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../FieldSelect */ "./src/components/common/FieldSelect/index.ts");
+/* harmony import */ var _FieldInput_styled__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../FieldInput/styled */ "./src/components/common/FieldInput/styled.ts");
+/* harmony import */ var _Buttons_styled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Buttons/styled */ "./src/components/common/Buttons/styled.ts");
+/* harmony import */ var _styled_device__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../styled/device */ "./src/styled/device.ts");
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22;
+
+function _taggedTemplateLiteralLoose(strings, raw) { if (!raw) { raw = strings.slice(0); } strings.raw = raw; return strings; }
+
+
+
+
+
+
+
+var SelectedCountryCodeContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.button(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["\n  align-items: center;\n  display: flex;\n  justify-content: space-between;\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  height: 50px;\n  box-sizing: border-box;\n  border-radius: 6px;\n  padding: 5px 7px 5px 16px;\n  width: 87px;\n  cursor: pointer;\n  z-index: 1;\n  text-align: left;\n  font-family: Poppins-Regular, sans-serif;\n  font-size: 16px;\n  color: #353945;\n  user-select: none;\n  outline: none;\n  margin-top: 25px;\n  background: transparent;\n  border: none;\n\n  ", "\n\n  ", ";\n\n  ", ";\n\n  @media (max-width: ", ") {\n    font-size: 16px;\n  }\n"])), function (props) {
+  return props.error && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteralLoose(["\n      border-color: #ff2467;\n    "])));
+}, function (props) {
+  return props.isEmpty && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteralLoose(["\n      color: #777e90;\n    "])));
+}, function (props) {
+  return props.disabled && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteralLoose(["\n      opacity: 0.3;\n      cursor: not-allowed;\n    "])));
+}, _styled_device__WEBPACK_IMPORTED_MODULE_3__.device.tablet);
+var Test = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteralLoose(["\n  display:block;\n  width:400px;\n  height: 200px;\n  ", "\n"])), function (props) {
+  return props.error && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteralLoose(["\n        border-color: #f84b7a;\n      "])));
+});
+var Wrapper = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject7 || (_templateObject7 = _taggedTemplateLiteralLoose(["\n  position: relative;\n  width: 100%;\n  text-align: center;\n  background-color: white;\n \n  & ", " {\n    width: auto;\n    min-height: unset;\n  }\n\n  & .input___input {\n    height: 50px;\n    color: #161643;\n    padding: 0 10px 0 90px;\n\n    &::-webkit-inner-spin-button,\n    &::-webkit-outer-spin-button {\n      -webkit-appearance: none;\n      margin: 0;\n    }\n\n    ", "\n  }\n\n  & ", " {\n    min-height: unset;\n    position: absolute;\n    max-width: 250px;\n    overflow-x: hidden;\n    white-space: nowrap;\n    top: 0;\n  }\n"])), _FieldInput_styled__WEBPACK_IMPORTED_MODULE_1__.Wrapper, function (props) {
+  return props.error && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteralLoose(["\n        border-color: #f84b7a;\n      "])));
+}, _FieldInput_styled__WEBPACK_IMPORTED_MODULE_1__.Label);
+var CountryCodesContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject9 || (_templateObject9 = _taggedTemplateLiteralLoose(["\n  overflow-y: auto;\n  height: 191px;\n  text-align: left;\n"])));
+var DisplayIcon = (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.default)(_FieldSelect__WEBPACK_IMPORTED_MODULE_0__.DisplayIcon)(_templateObject10 || (_templateObject10 = _taggedTemplateLiteralLoose(["\n  padding-left: 9px;\n  width: 24px;\n  box-shadow: none;\n  margin-right: 0;\n"])));
+var Menu = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject11 || (_templateObject11 = _taggedTemplateLiteralLoose(["\n  width: 100%;\n  height: 265px;\n  box-shadow: 0 15px 15px 0 rgba(38, 153, 251, 0.1);\n  position: absolute;\n  left: 0;\n  z-index: 3;\n  background-color: white;\n  top: 80px;\n  padding: 15px 0 0 16px;\n  box-sizing: border-box;\n  text-align: left;\n  visibility: hidden;\n  margin-bottom: 30px;\n  border-radius: 3px;\n\n  ", ";\n\n  @media (max-width: ", ") {\n    width: 280px;\n  }\n"])), function (props) {
+  return props.open && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject12 || (_templateObject12 = _taggedTemplateLiteralLoose(["\n      visibility: visible;\n    "])));
+}, _styled_device__WEBPACK_IMPORTED_MODULE_3__.device.mobileL);
+var SearchIcon = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.img(_templateObject13 || (_templateObject13 = _taggedTemplateLiteralLoose(["\n  height: 16px;\n  width: 16px;\n  position: absolute;\n  top: 8px;\n  left: 8px;\n"])));
+var SearchInput = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.input(_templateObject14 || (_templateObject14 = _taggedTemplateLiteralLoose(["\n  outline: none;\n  border: none;\n  width: 140px;\n  height: 30px;\n  position: absolute;\n  top: 0;\n  left: 32px;\n\n  &,\n  &::placeholder {\n    font-family: inherit;\n    font-size: 18px;\n    line-height: 1.18;\n    text-align: left;\n    color: #2194f7;\n  }\n"])));
+var InputRelativeWrapper = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject15 || (_templateObject15 = _taggedTemplateLiteralLoose(["\n  width: 140px;\n  height: 30px;\n  position: relative;\n  padding-bottom: 18px;\n  margin: 0 !important;\n"])));
+var Divider = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject16 || (_templateObject16 = _taggedTemplateLiteralLoose(["\n  background-color: rgba(231, 235, 241, 0.51);\n  height: 1px;\n  margin: 5px 37px 5px 0;\n"])));
+var Option = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject17 || (_templateObject17 = _taggedTemplateLiteralLoose(["\n  font-family: inherit;\n  font-size: 16px;\n  text-align: left;\n  line-height: 1.18;\n  color: #161643;\n  cursor: pointer;\n  padding: 16px 0 16px 20px !important;\n\n  &:hover {\n    cursor: pointer;\n    background-color: #f4f5f6;\n    font-family: inherit;\n    color: #23262f;\n    font-weight: 400;\n    border-radius: 12px;\n  }\n\n  ", ";\n"])), function (props) {
+  return props.selected && (0,styled_components__WEBPACK_IMPORTED_MODULE_4__.css)(_templateObject18 || (_templateObject18 = _taggedTemplateLiteralLoose(["\n      font-family: inherit;\n      cursor: default;\n\n      &:hover {\n        color: #2d508e;\n      }\n    "])));
+});
+var OptionWrapper = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject19 || (_templateObject19 = _taggedTemplateLiteralLoose(["\n  margin-right: 37px;\n"])));
+var LoaderWrapper = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject20 || (_templateObject20 = _taggedTemplateLiteralLoose(["\n  width: 16px;\n  position: absolute;\n  top: 8px;\n  right: 2px;\n  z-index: 3;\n"])));
+var RequestErrorMessage = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject21 || (_templateObject21 = _taggedTemplateLiteralLoose(["\n  position: absolute;\n  top: 23px;\n  right: 0;\n  font-family: ProximaNova-Bold, sans-serif;\n  font-size: 13px;\n  z-index: 3;\n  color: #ff2467;\n\n  & > button {\n    height: 20px;\n    min-width: auto;\n    font-size: 10px;\n    background-color: #ff2467;\n    border-color: #ff2467;\n\n    & > ", " {\n      height: auto;\n    }\n  }\n"])), _Buttons_styled__WEBPACK_IMPORTED_MODULE_2__.StyledButton);
+var EmptyOption = styled_components__WEBPACK_IMPORTED_MODULE_4__.default.div(_templateObject22 || (_templateObject22 = _taggedTemplateLiteralLoose(["\n  font-family: inherit;\n  text-align: left;\n  font-weight: 500;\n  line-height: 1.18;\n  padding: 19px 9px 18px;\n  color: #2d508e;\n  opacity: 0.5;\n  font-size: 18px;\n"])));
+
+/***/ }),
+
 /***/ "./src/components/common/FieldSelect/Select.tsx":
 /*!******************************************************!*\
   !*** ./src/components/common/FieldSelect/Select.tsx ***!
@@ -6391,7 +6789,9 @@ function ChekinSDKProvider(props) {
   var _api$locations = api.locations,
       getCountries = _api$locations.getCountries,
       getLocations = _api$locations.getLocations,
-      getCities = _api$locations.getCities;
+      getCities = _api$locations.getCities,
+      getProvinces = _api$locations.getProvinces,
+      getMunicipalities = _api$locations.getMunicipalities;
   var getTaxExcemptions = api.taxExcemptions.getTaxExcemptions;
   var getPurposeOfStay = api.purposeOfStay.getPurposeOfStay; // const { getTaxExcemptions } = api.taxExcemptions;
 
@@ -6403,7 +6803,9 @@ function ChekinSDKProvider(props) {
       getTaxExcemptions: getTaxExcemptions,
       getLocations: getLocations,
       getCities: getCities,
-      getPurposeOfStay: getPurposeOfStay
+      getPurposeOfStay: getPurposeOfStay,
+      getProvinces: getProvinces,
+      getMunicipalities: getMunicipalities
     }
   }, props));
 }
@@ -6455,7 +6857,8 @@ var GuestContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().cre
   hasCityOptions: false,
   hasTaxExcemptions: false,
   hasBirthCities: false,
-  hasPurposeOfStay: false
+  hasPurposeOfStay: false,
+  hasProvinces: false
 });
 
 function GuestProvider(props) {
@@ -6466,10 +6869,20 @@ function GuestProvider(props) {
       birthCountry = _React$useState[0],
       setBirthCountry = _React$useState[1];
 
-  var _useQuery = (0,react_query__WEBPACK_IMPORTED_MODULE_1__.useQuery)(["formFields", "asdfads", birthCountry], function () {
+  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(undefined),
+      arrivalCountry = _React$useState2[0],
+      setArrivalCountry = _React$useState2[1];
+
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(undefined),
+      nextDestinationCountry = _React$useState3[0],
+      setNextDestinationCountry = _React$useState3[1];
+
+  var _useQuery = (0,react_query__WEBPACK_IMPORTED_MODULE_1__.useQuery)(["formFields", "asdfads", birthCountry, arrivalCountry, nextDestinationCountry], function () {
     return getFormFields({
       reservationId: "asdasd",
       countryCode: birthCountry
+      /*arrivalCountry:arrivalCountry, nextDestinationCountry:nextDestinationCountry*/
+
     });
   }),
       formFieldsData = _useQuery.data;
@@ -6503,6 +6916,9 @@ function GuestProvider(props) {
   var hasBirthCities = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return displayingFormNames == null ? void 0 : displayingFormNames.includes(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city);
   }, [displayingFormNames]);
+  var hasProvinces = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
+    return displayingFormNames == null ? void 0 : displayingFormNames.includes(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_province);
+  }, [displayingFormNames]);
   var hasTaxExcemptions = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return displayingFormNames == null ? void 0 : displayingFormNames.includes("tax_exemption");
   }, [displayingFormNames]);
@@ -6510,44 +6926,8 @@ function GuestProvider(props) {
     return displayingFormNames == null ? void 0 : displayingFormNames.includes(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay);
   }, [displayingFormNames]);
   var formFields = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
-    console.log("disparo");
     return formFieldsArrayToObject();
-  }, [formFieldsArrayToObject]); // const updateFormState = React.useCallback(() => {
-  //   const newFields = formFieldsArrayToObject();
-  //   let isEqual = true;
-  //   if (newFields) {
-  //     // console.log('fields: ', formFields)
-  //     if (!formFields) {
-  //       setAddForm?.(newFields);
-  //       return;
-  //     }
-  //     // console.log(formFields[FORM_NAMES.birth_place_city]);
-  //     //   console.log(newFields[FORM_NAMES.birth_place_city]);
-  //     for (const i in newFields) {
-  //       if (formFields?.[i].name === newFields[i].name) {
-  //         if (formFields?.[i].active !== newFields[i].active) {
-  //           isEqual = false;
-  //         }
-  //       }
-  //     }
-  //     console.log('equal: ', isEqual);
-  //     if (!isEqual) {
-  //       // console.log(formFields[FORM_NAMES.birth_place_city]);
-  //       // console.log(newFields[FORM_NAMES.birth_place_city]);
-  //       for (const field in newFields) {
-  //         setAddForm?.((current) => {
-  //           if (current) {
-  //             console.log("old: ", current[field]);
-  //             console.log("new: ", newFields[field]);
-  //             current[field].active = newFields?.[field].active;
-  //           }
-  //           return { ...current };
-  //         });
-  //       }
-  //     }
-  //   }
-  // }, [formFieldsArrayToObject, addForm, formFields]);
-
+  }, [formFieldsArrayToObject]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(GuestContext.Provider, _extends({
     value: {
       formFields: formFields,
@@ -6557,8 +6937,10 @@ function GuestProvider(props) {
       hasTaxExcemptions: hasTaxExcemptions,
       hasBirthCities: hasBirthCities,
       setBirthCountry: setBirthCountry,
-      hasPurposeOfStay: hasPurposeOfStay // updateFormState,
-
+      setArrivalCountry: setArrivalCountry,
+      setNextDestinationCountry: setNextDestinationCountry,
+      hasPurposeOfStay: hasPurposeOfStay,
+      hasProvinces: hasProvinces
     }
   }, props));
 }
@@ -6613,7 +6995,7 @@ function AppProviders(_ref) {
     client: queryClient
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_i18next__WEBPACK_IMPORTED_MODULE_6__.I18nextProvider, {
     i18n: _i18n__WEBPACK_IMPORTED_MODULE_5__.default
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ChekinSDK__WEBPACK_IMPORTED_MODULE_1__.ChekinSDKProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_reservation__WEBPACK_IMPORTED_MODULE_2__.ReservationProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_guest__WEBPACK_IMPORTED_MODULE_3__.GuestProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, null, children))))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ChekinSDK__WEBPACK_IMPORTED_MODULE_1__.ChekinSDKProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_reservation__WEBPACK_IMPORTED_MODULE_2__.ReservationProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_guest__WEBPACK_IMPORTED_MODULE_3__.GuestProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.HashRouter, null, children))))));
 }
 
 AppProviders.defaultProps = defaultProps;
@@ -6843,7 +7225,7 @@ function useFetchLocations(props) {
       locations = _useQuery.data,
       isError = _useQuery.isError,
       error = _useQuery.error,
-      isValidating = _useQuery.isLoading,
+      isLoadingLocations = _useQuery.isLoading,
       refetchLocations = _useQuery.refetch;
 
   var _useMutation = (0,react_query__WEBPACK_IMPORTED_MODULE_1__.useMutation)(mutateLocations, {
@@ -6872,7 +7254,7 @@ function useFetchLocations(props) {
     locations: locations,
     revalidateLocations: revalidateLocations,
     isError: isError,
-    isValidating: isValidating,
+    isLoadingLocations: isLoadingLocations,
     error: error,
     locationsAsOptions: locationsAsOptions,
     citiesAsOptions: citiesAsOptions,
@@ -7027,11 +7409,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/useTranslation.js");
+/* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/useTranslation.js");
+/* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/Trans.js");
 /* harmony import */ var _context_reservation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/reservation */ "./src/context/reservation.tsx");
 /* harmony import */ var _styled_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styled/common */ "./src/styled/common.ts");
 /* harmony import */ var _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../pages/AddPersonalDataForm/types */ "./src/pages/AddPersonalDataForm/types.ts");
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
+/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-hook-form */ "./node_modules/react-hook-form/dist/index.esm.mjs");
 /* harmony import */ var _components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/common/FieldInput */ "./src/components/common/FieldInput/index.ts");
 /* harmony import */ var _components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/common/FieldSelect */ "./src/components/common/FieldSelect/index.ts");
 /* harmony import */ var _components_common_FieldDatepicker__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/common/FieldDatepicker */ "./src/components/common/FieldDatepicker/index.ts");
@@ -7041,11 +7424,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_common_FieldAsyncSelect__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/common/FieldAsyncSelect */ "./src/components/common/FieldAsyncSelect/index.ts");
 /* harmony import */ var _useFetchTaxExcemption__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./useFetchTaxExcemption */ "./src/hooks/useFetchTaxExcemption.ts");
 /* harmony import */ var _useFetchPurposesToStay__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./useFetchPurposesToStay */ "./src/hooks/useFetchPurposesToStay.ts");
+/* harmony import */ var _components_common_FieldPhoneInput__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/common/FieldPhoneInput */ "./src/components/common/FieldPhoneInput/index.ts");
 var _excluded = ["value"],
     _excluded2 = ["value"],
     _excluded3 = ["value"],
-    _excluded4 = ["value"],
-    _excluded5 = ["onChange"];
+    _excluded4 = ["ref"],
+    _excluded5 = ["value"],
+    _excluded6 = ["onChange"],
+    _excluded7 = ["onChange"],
+    _excluded8 = ["value"],
+    _excluded9 = ["value"];
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
@@ -7067,13 +7455,14 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 
 
 
+
 function useGuestFormFields() {
-  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_13__.useFormContext)(),
+  var _useFormContext = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_14__.useFormContext)(),
       register = _useFormContext.register,
       formState = _useFormContext.formState,
       control = _useFormContext.control;
 
-  var _useTranslation = (0,react_i18next__WEBPACK_IMPORTED_MODULE_14__.useTranslation)(),
+  var _useTranslation = (0,react_i18next__WEBPACK_IMPORTED_MODULE_15__.useTranslation)(),
       t = _useTranslation.t;
 
   var errors = formState.errors;
@@ -7083,7 +7472,9 @@ function useGuestFormFields() {
 
   var _useGuest = (0,_context_guest__WEBPACK_IMPORTED_MODULE_8__.useGuest)(),
       f = _useGuest.formFields,
-      setBirthCountry = _useGuest.setBirthCountry;
+      setBirthCountry = _useGuest.setBirthCountry,
+      setArrivalCountry = _useGuest.setArrivalCountry,
+      setNextDestinationCountry = _useGuest.setNextDestinationCountry;
 
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(f),
       formFields = _React$useState[0],
@@ -7104,8 +7495,7 @@ function useGuestFormFields() {
               isEqual = false;
             }
           }
-        } // if (!isEqual) {
-
+        }
 
         for (var field in f) {
           var _f$field;
@@ -7114,13 +7504,13 @@ function useGuestFormFields() {
         }
 
         return _extends({}, current);
-      } // }
-
+      }
     });
   }, [f]);
 
   var _useFetchLocations = (0,_useFetchLocations__WEBPACK_IMPORTED_MODULE_9__.useFetchLocations)(),
       locationsAsOptions = _useFetchLocations.locationsAsOptions,
+      isLoadingLocations = _useFetchLocations.isLoadingLocations,
       citiesAsOptions = _useFetchLocations.citiesAsOptions,
       isCitiesLoading = _useFetchLocations.isCitiesLoading;
 
@@ -7131,282 +7521,16 @@ function useGuestFormFields() {
       purposesOfStayAsOptions = _useFetchPurposesToSt.purposesOfStayAsOptions,
       isPurposesOfStayLoading = _useFetchPurposesToSt.isPurposesOfStayLoading;
 
+  var phoneInputRef = react__WEBPACK_IMPORTED_MODULE_0___default().useRef(null);
   var getRequiredOrOptionalFieldLabel = react__WEBPACK_IMPORTED_MODULE_0___default().useCallback(function (label, required) {
     if (required) {
       return label;
     }
 
     return label + " (" + t("optional") + ")";
-  }, [t]); //   () => ({
-  //     [FORM_NAMES.name]: (
-  //       required = formFields?.[FORM_NAMES.name]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Input
-  //           label={getRequiredOrOptionalFieldLabel(t('name'), required)}
-  //           error={errors[FORM_NAMES.name]?.message}
-  //           placeholder={t('enter_name')}
-  //           {...register(FORM_NAMES.name, {
-  //             required,
-  //             pattern: {
-  //               value: getNamePattern(housingCountryCode),
-  //               message: t('cant_contain_number_and_symbols'),
-  //             },
-  //             maxLength: {
-  //               value: maxNamesInputLength,
-  //               message: t('max_length', { length: maxNamesInputLength }),
-  //             },
-  //           })}
-  //           // disabled={isLoadingCustomForm}
-  //           autoCorrect='off'
-  //           spellCheck={false}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.surname]: (
-  //       required = formFields?.[FORM_NAMES.surname]?.required
-  //     ) => (
-  //   <FormFieldWrapper>
-  //     <Input
-  //       label={getRequiredOrOptionalFieldLabel(t('surname'), required)}
-  //       placeholder={t('enter_surname')}
-  //       {...register(FORM_NAMES.surname, {
-  //         required,
-  //         pattern: {
-  //           value: getNamePattern(housingCountryCode),
-  //           message: t('cant_contain_number_and_symbols'),
-  //         },
-  //         maxLength: {
-  //           value: maxNamesInputLength,
-  //           message: t('max_length', { length: maxNamesInputLength }),
-  //         },
-  //       })}
-  //       error={errors[FORM_NAMES.surname]?.message}
-  //       // disabled={isLoadingCustomForm}
-  //       autoCorrect='off'
-  //       spellCheck={false}
-  //     />
-  //   </FormFieldWrapper>
-  // ),
-  //     [FORM_NAMES.second_surname]: (
-  //       required = formFields?.[FORM_NAMES.second_surname]?.required
-  //     ) => {
-  //       return (
-  // <FormFieldWrapper>
-  //   <Input
-  //     label={getRequiredOrOptionalFieldLabel(
-  //       t('second_surname'),
-  //       required
-  //     )}
-  //     placeholder={t('enter_second_surname')}
-  //     {...register(FORM_NAMES.second_surname, {
-  //       required,
-  //       pattern: {
-  //         value: getNamePattern(housingCountryCode),
-  //         message: t('cant_contain_number_and_symbols'),
-  //       },
-  //       maxLength: {
-  //         value: maxNamesInputLength,
-  //         message: t('max_length', { length: maxNamesInputLength }),
-  //       },
-  //     })}
-  //     error={errors[FORM_NAMES.second_surname]?.message}
-  //     // disabled={isLoadingCustomForm}
-  //     autoCorrect='off'
-  //     spellCheck={false}
-  //   />
-  // </FormFieldWrapper>
-  //       );
-  //     },
-  //     [FORM_NAMES.nationality]: (
-  //       required = formFields?.[FORM_NAMES.nationality]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Controller
-  //           name={FORM_NAMES.nationality}
-  //           rules={{ required }}
-  //           control={control}
-  //           render={({
-  //             field: { value, ...restField },
-  //             fieldState: { error },
-  //           }) => (
-  //             <Select
-  //               placeholder={t('select')}
-  //               options={locationsAsOptions}
-  //               label={getRequiredOrOptionalFieldLabel(
-  //                 t('nationality'),
-  //                 required
-  //               )}
-  //               error={error?.message}
-  //               // disabled={isLoadingCustomForm}
-  //               value={value as SelectOptionType}
-  //               {...restField}
-  //             />
-  //           )}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.birth_place_country]: (
-  //       required = formFields?.[FORM_NAMES.birth_place_country]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Controller
-  //           name={FORM_NAMES.birth_place_country}
-  //           rules={{ required }}
-  //           control={control}
-  //           render={({
-  //             field: { value, ...restField },
-  //             fieldState: { error },
-  //           }) => (
-  //             <Select
-  //               placeholder={t('select')}
-  //               options={locationsAsOptions}
-  //               label={getRequiredOrOptionalFieldLabel(
-  //                 t('birth_place_country'),
-  //                 required
-  //               )}
-  //               error={error?.message}
-  //               // disabled={isLoadingCustomForm}
-  //               value={value as SelectOptionType}
-  //               onChange={(option) => {
-  //                 console.log(option);
-  //                 if (option.value === COUNTRY_CODES.italy) {
-  //                   setBirthCountry?.(COUNTRY_CODES.italy);
-  //                 }
-  //               }}
-  //               // {...restField}
-  //             />
-  //           )}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.birth_place_city]: (
-  //       required = formFields?.[FORM_NAMES.birth_place_city]?.required
-  //     ) => {
-  //       if (formFields?.[FORM_NAMES.birth_place_city]?.active) {
-  //         return (
-  //           <FormFieldWrapper>
-  //             <Controller
-  //               name={FORM_NAMES.birth_place_city}
-  //               rules={{ required }}
-  //               control={control}
-  //               render={({
-  //                 field: { value, ...restField },
-  //                 fieldState: { error },
-  //               }) => (
-  //                 <AsyncSelect
-  //                   placeholder={t('select')}
-  //                   loadOptions={(inputValue, callback) => {
-  //                     callback(getBestMatches(citiesAsOptions, inputValue));
-  //                   }}
-  //                   label={getRequiredOrOptionalFieldLabel(
-  //                     t('city_of_birth'),
-  //                     required
-  //                   )}
-  //                   error={error?.message}
-  //                   disabled={isCitiesLoading}
-  //                   // value={value as SelectOptionType}
-  //                   loading={isCitiesLoading}
-  //                   cacheOptions
-  //                   defaultValues
-  //                   {...restField}
-  //                 />
-  //               )}
-  //             />
-  //           </FormFieldWrapper>
-  //         );
-  //       }
-  //     },
-  //     [FORM_NAMES.birth_date]: (
-  //       required = formFields?.[FORM_NAMES.birth_date]?.required
-  //     ) => (
-  // <FormFieldWrapper>
-  //   <Controller
-  //     name={FORM_NAMES.birth_date}
-  //     rules={{
-  //       required,
-  //       // validate: value => {
-  //       //   if (!value) {
-  //       //     return true;
-  //       //   }
-  //       //   const docDateOfIssue = getValues()[FORM_NAMES.docDateOfIssue];
-  //       //   return validateBirthDate(value, docDateOfIssue);
-  //       // },
-  //     }}
-  //     control={control}
-  //     render={({
-  //       field: { onChange, ...restField },
-  //       fieldState: { error },
-  //     }) => (
-  //       <Datepicker
-  //         // disabled={isLoadingCustomForm}
-  //         error={error?.message}
-  //         label={getRequiredOrOptionalFieldLabel(
-  //           t('birth_date'),
-  //           required
-  //         )}
-  //         onChange={(value) => {
-  //           return onChange(value?.toString());
-  //         }}
-  //         {...restField}
-  //       />
-  //     )}
-  //   />
-  // </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.document_type]: (
-  //       required = formFields?.[FORM_NAMES.document_type]?.required
-  //     ) => (
-  // <FormFieldWrapper>
-  //   <Controller
-  //     name={FORM_NAMES.document_type}
-  //     rules={{ required }}
-  //     control={control}
-  //     render={({
-  //       field: { value, ...restField },
-  //       fieldState: { error },
-  //     }) => (
-  //       <Select
-  //         placeholder={t('select')}
-  //         options={formFields?.[FORM_NAMES.document_type]?.options}
-  //         label={getRequiredOrOptionalFieldLabel(
-  //           t('select_nationality_and_document_type'),
-  //           required
-  //         )}
-  //         error={error?.message}
-  //         // disabled={isLoadingCustomForm}
-  //         value={value as SelectOptionType}
-  //         {...restField}
-  //       />
-  //     )}
-  //   />
-  // </FormFieldWrapper>
-  //     ),
-  //   }),
-  //   [
-  //     t,
-  //     formFields,
-  //     control,
-  //     errors,
-  //     getRequiredOrOptionalFieldLabel,
-  //     housingCountryCode,
-  //     register,
-  //     citiesAsOptions,
-  //     locationsAsOptions,
-  //   ]
-  // );
-  // const renderFormFields = React.useCallback(() => {
-  //   return displayingFormNames?.map((formName) => {
-  //     return (
-  //       <React.Fragment key={formName}>
-  //         {fields[formName as keyof typeof fields]?.()}
-  //       </React.Fragment>
-  //     );
-  //   });
-  // }, [displayingFormNames, fields]
-
+  }, [t]);
   var renderFormFields = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
-    var _formFields$FORM_NAME, _formFields$FORM_NAME2, _errors$FORM_NAMES$na, _formFields$FORM_NAME3, _formFields$FORM_NAME4, _formFields$FORM_NAME5, _formFields$FORM_NAME6, _errors$FORM_NAMES$su, _formFields$FORM_NAME7, _formFields$FORM_NAME8, _formFields$FORM_NAME9, _errors$FORM_NAMES$se, _formFields$FORM_NAME10, _formFields$FORM_NAME11, _formFields$FORM_NAME13, _formFields$FORM_NAME14, _formFields$FORM_NAME16, _formFields$FORM_NAME17, _formFields$FORM_NAME19, _formFields$FORM_NAME20, _formFields$FORM_NAME22, _formFields$FORM_NAME23, _formFields$FORM_NAME25, _formFields$FORM_NAME26, _formFields$FORM_NAME29, _formFields$FORM_NAME30;
+    var _formFields$FORM_NAME, _formFields$FORM_NAME2, _errors$FORM_NAMES$na, _formFields$FORM_NAME3, _formFields$FORM_NAME4, _formFields$FORM_NAME5, _formFields$FORM_NAME6, _errors$FORM_NAMES$su, _formFields$FORM_NAME7, _formFields$FORM_NAME8, _formFields$FORM_NAME9, _errors$FORM_NAMES$se, _formFields$FORM_NAME10, _formFields$FORM_NAME11, _formFields$FORM_NAME13, _formFields$FORM_NAME14, _formFields$FORM_NAME16, _formFields$FORM_NAME17, _formFields$FORM_NAME19, _formFields$FORM_NAME20, _formFields$FORM_NAME22, _formFields$FORM_NAME23, _formFields$FORM_NAME24, _errors$FORM_NAMES$em, _formFields$FORM_NAME25, _formFields$FORM_NAME26, _formFields$FORM_NAME28, _formFields$FORM_NAME29, _formFields$FORM_NAME31, _formFields$FORM_NAME32, _formFields$FORM_NAME35, _formFields$FORM_NAME36, _formFields$FORM_NAME38, _formFields$FORM_NAME39, _formFields$FORM_NAME42, _formFields$FORM_NAME43, _formFields$FORM_NAME45, _formFields$FORM_NAME46, _formFields$FORM_NAME48, _formFields$FORM_NAME49, _formFields$FORM_NAME51, _formFields$FORM_NAME52, _formFields$FORM_NAME53, _formFields$FORM_NAME54, _formFields$FORM_NAME55, _formFields$FORM_NAME56, _errors$FORM_NAMES$fu, _formFields$FORM_NAME57, _formFields$FORM_NAME58, _formFields$FORM_NAME60, _formFields$FORM_NAME61, _formFields$FORM_NAME62, _formFields$FORM_NAME63, _formFields$FORM_NAME64, _formFields$FORM_NAME66, _formFields$FORM_NAME67, _formFields$FORM_NAME68, _errors$FORM_NAMES$re, _formFields$FORM_NAME69, _formFields$FORM_NAME70, _formFields$FORM_NAME71, _errors$FORM_NAMES$re2, _formFields$FORM_NAME72, _formFields$FORM_NAME73, _formFields$FORM_NAME74, _errors$FORM_NAMES$ne;
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, (formFields == null ? void 0 : (_formFields$FORM_NAME = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.name]) == null ? void 0 : _formFields$FORM_NAME.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
       label: getRequiredOrOptionalFieldLabel(t("name"), formFields == null ? void 0 : (_formFields$FORM_NAME2 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.name]) == null ? void 0 : _formFields$FORM_NAME2.required),
@@ -7468,7 +7592,7 @@ function useGuestFormFields() {
       ,
       autoCorrect: "off",
       spellCheck: false
-    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME10 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.nationality]) == null ? void 0 : _formFields$FORM_NAME10.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME10 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.nationality]) == null ? void 0 : _formFields$FORM_NAME10.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.nationality,
       rules: {
         required: formFields == null ? void 0 : (_formFields$FORM_NAME11 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.nationality]) == null ? void 0 : _formFields$FORM_NAME11.required
@@ -7491,7 +7615,7 @@ function useGuestFormFields() {
           value: value
         }, restField));
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME13 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_country]) == null ? void 0 : _formFields$FORM_NAME13.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME13 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_country]) == null ? void 0 : _formFields$FORM_NAME13.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_country,
       rules: {
         required: formFields == null ? void 0 : (_formFields$FORM_NAME14 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_country]) == null ? void 0 : _formFields$FORM_NAME14.required
@@ -7513,14 +7637,13 @@ function useGuestFormFields() {
           ,
           value: value,
           onChange: function onChange(option) {
-            console.log(option); // if (option.value === COUNTRY_CODES.italy) {
-
+            // if (option.value === COUNTRY_CODES.italy) {
             setBirthCountry == null ? void 0 : setBirthCountry(option.value); // }
           } // {...restField}
 
         });
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME16 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city]) == null ? void 0 : _formFields$FORM_NAME16.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME16 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city]) == null ? void 0 : _formFields$FORM_NAME16.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city,
       rules: {
         required: formFields == null ? void 0 : (_formFields$FORM_NAME17 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city]) == null ? void 0 : _formFields$FORM_NAME17.active
@@ -7548,7 +7671,7 @@ function useGuestFormFields() {
           defaultValues: true
         }, restField));
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME19 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.tax_exemption]) == null ? void 0 : _formFields$FORM_NAME19.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME19 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.tax_exemption]) == null ? void 0 : _formFields$FORM_NAME19.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.tax_exemption,
       rules: {
         required: formFields == null ? void 0 : (_formFields$FORM_NAME20 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_place_city]) == null ? void 0 : _formFields$FORM_NAME20.required
@@ -7567,53 +7690,93 @@ function useGuestFormFields() {
 
         }, field));
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME22 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME22.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
-      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay,
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME22 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.email]) == null ? void 0 : _formFields$FORM_NAME22.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
+      label: getRequiredOrOptionalFieldLabel(t("email"), formFields == null ? void 0 : (_formFields$FORM_NAME23 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.email]) == null ? void 0 : _formFields$FORM_NAME23.required),
+      placeholder: t("email")
+    }, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.email, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME24 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.email]) == null ? void 0 : _formFields$FORM_NAME24.required //  pattern: {
+      //    value: getEmailPattern(getHousingCountryCode(reservation)),
+      //    message: t('invalid_email'),
+      //  },
+
+    }), {
+      inputMode: "email",
+      autoCorrect: "off",
+      spellCheck: false,
+      autoCapitalize: "none",
+      error: (_errors$FORM_NAMES$em = errors[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.email]) == null ? void 0 : _errors$FORM_NAMES$em.message //  disabled={isLoadingCustomForm}
+
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME25 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.phone]) == null ? void 0 : _formFields$FORM_NAME25.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.phone,
       rules: {
-        required: formFields == null ? void 0 : (_formFields$FORM_NAME23 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME23.required
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME26 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.phone]) == null ? void 0 : _formFields$FORM_NAME26.required
       },
       control: control,
       render: function render(_ref5) {
-        var _formFields$FORM_NAME24;
+        var _formFields$FORM_NAME27;
 
-        var field = _ref5.field,
+        var _ref5$field = _ref5.field,
+            ref = _ref5$field.ref,
+            restField = _objectWithoutPropertiesLoose(_ref5$field, _excluded4),
             error = _ref5.fieldState.error;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldPhoneInput__WEBPACK_IMPORTED_MODULE_13__.default // defaultCode={defaultPhoneDetails?.code}
+        // defaultInputValue={defaultPhoneDetails?.number}
+        , _extends({
+          label: getRequiredOrOptionalFieldLabel(t('phone_number'), formFields == null ? void 0 : (_formFields$FORM_NAME27 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.phone]) == null ? void 0 : _formFields$FORM_NAME27.required),
+          placeholder: t('enter_your_phone_number'),
+          error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
+          ,
+          ref: phoneInputRef
+        }, restField));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME28 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME28.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME29 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME29.required
+      },
+      control: control,
+      render: function render(_ref6) {
+        var _formFields$FORM_NAME30;
+
+        var field = _ref6.field,
+            error = _ref6.fieldState.error;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
           placeholder: t("select"),
-          label: getRequiredOrOptionalFieldLabel(t("purpose_of_stay"), formFields == null ? void 0 : (_formFields$FORM_NAME24 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME24.required),
+          label: getRequiredOrOptionalFieldLabel(t("purpose_of_stay"), formFields == null ? void 0 : (_formFields$FORM_NAME30 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.purpose_of_stay]) == null ? void 0 : _formFields$FORM_NAME30.required),
           options: purposesOfStayAsOptions,
           loading: isPurposesOfStayLoading,
           error: error == null ? void 0 : error.message,
           disabled: isPurposesOfStayLoading
         }, field));
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME25 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME25.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME31 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME31.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type,
       rules: {
-        required: formFields == null ? void 0 : (_formFields$FORM_NAME26 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME26.required
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME32 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME32.required
       },
       control: control,
-      render: function render(_ref6) {
-        var _formFields$FORM_NAME27, _formFields$FORM_NAME28;
+      render: function render(_ref7) {
+        var _formFields$FORM_NAME33, _formFields$FORM_NAME34;
 
-        var _ref6$field = _ref6.field,
-            value = _ref6$field.value,
-            restField = _objectWithoutPropertiesLoose(_ref6$field, _excluded4),
-            error = _ref6.fieldState.error;
+        var _ref7$field = _ref7.field,
+            value = _ref7$field.value,
+            restField = _objectWithoutPropertiesLoose(_ref7$field, _excluded5),
+            error = _ref7.fieldState.error;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
           placeholder: t("select"),
-          options: formFields == null ? void 0 : (_formFields$FORM_NAME27 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME27.options,
-          label: getRequiredOrOptionalFieldLabel(t("select_nationality_and_document_type"), formFields == null ? void 0 : (_formFields$FORM_NAME28 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME28.required),
+          options: formFields == null ? void 0 : (_formFields$FORM_NAME33 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME33.options,
+          label: getRequiredOrOptionalFieldLabel(t("select_nationality_and_document_type"), formFields == null ? void 0 : (_formFields$FORM_NAME34 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_type]) == null ? void 0 : _formFields$FORM_NAME34.required),
           error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
           ,
           value: value
         }, restField));
       }
-    })), (formFields == null ? void 0 : (_formFields$FORM_NAME29 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME29.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME35 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME35.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
       name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date,
       rules: {
-        required: formFields == null ? void 0 : (_formFields$FORM_NAME30 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME30.required // validate: value => {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME36 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME36.required // validate: value => {
         //   if (!value) {
         //     return true;
         //   }
@@ -7623,31 +7786,254 @@ function useGuestFormFields() {
 
       },
       control: control,
-      render: function render(_ref7) {
-        var _formFields$FORM_NAME31;
+      render: function render(_ref8) {
+        var _formFields$FORM_NAME37;
 
-        var _ref7$field = _ref7.field,
-            _onChange = _ref7$field.onChange,
-            restField = _objectWithoutPropertiesLoose(_ref7$field, _excluded5),
-            error = _ref7.fieldState.error;
+        var _ref8$field = _ref8.field,
+            _onChange = _ref8$field.onChange,
+            restField = _objectWithoutPropertiesLoose(_ref8$field, _excluded6),
+            error = _ref8.fieldState.error;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldDatepicker__WEBPACK_IMPORTED_MODULE_6__.default // disabled={isLoadingCustomForm}
         , _extends({
           error: error == null ? void 0 : error.message,
-          label: getRequiredOrOptionalFieldLabel(t("birth_date"), formFields == null ? void 0 : (_formFields$FORM_NAME31 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME31.required),
+          label: getRequiredOrOptionalFieldLabel(t("birth_date"), formFields == null ? void 0 : (_formFields$FORM_NAME37 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.birth_date]) == null ? void 0 : _formFields$FORM_NAME37.required),
           onChange: function onChange(value) {
             return _onChange(value == null ? void 0 : value.toString());
           }
         }, restField));
       }
-    }))); // return displayingFormNames?.map((formName) => {
-    //   return (
-    //     <React.Fragment key={formName}>
-    //       {fields[formName as keyof typeof fields]?.()}
-    //     </React.Fragment>
-    //   );
-    // });
-  }, [citiesAsOptions, control, errors, formFields, getRequiredOrOptionalFieldLabel, housingCountryCode, isCitiesLoading, locationsAsOptions, register, setBirthCountry, t, taxExcemptionsAsOptions]);
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME38 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME38.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME39 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME39.active
+      },
+      control: control,
+      render: function render(_ref9) {
+        var _formFields$FORM_NAME40, _formFields$FORM_NAME41;
+
+        var field = _ref9.field,
+            error = _ref9.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select_sex"),
+          label: getRequiredOrOptionalFieldLabel(t("sex"), formFields == null ? void 0 : (_formFields$FORM_NAME40 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME40.required),
+          options: formFields == null ? void 0 : (_formFields$FORM_NAME41 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME41.options,
+          error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
+
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME42 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME42.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME43 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME43.required
+      },
+      control: control,
+      render: function render(_ref10) {
+        var _formFields$FORM_NAME44;
+
+        var field = _ref10.field,
+            error = _ref10.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select"),
+          label: getRequiredOrOptionalFieldLabel(t("citizenship"), formFields == null ? void 0 : (_formFields$FORM_NAME44 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME44.required),
+          options: locationsAsOptions,
+          loading: isLoadingLocations,
+          error: error == null ? void 0 : error.message // trimFilterBy={4}
+          ,
+          disabled: isLoadingLocations
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME45 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME45.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME46 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME46.required //  validate: value => {
+        //    if (!value) {
+        //      return true;
+        //    }
+        //    const birthDate = getValues()[FORM_NAMES.birthDate];
+        //    return validateIssueDate(value, birthDate);
+        //  },
+
+      },
+      control: control,
+      render: function render(_ref11) {
+        var _formFields$FORM_NAME47;
+
+        var _ref11$field = _ref11.field,
+            _onChange2 = _ref11$field.onChange,
+            restField = _objectWithoutPropertiesLoose(_ref11$field, _excluded7),
+            error = _ref11.fieldState.error;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldDatepicker__WEBPACK_IMPORTED_MODULE_6__.default, _extends({
+          withTooltip: true,
+          tooltipContentKey: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_i18next__WEBPACK_IMPORTED_MODULE_16__.Trans, {
+            i18nKey: "date_when_the_doc_created"
+          }, "Date when the document was created. (It is ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, "not"), " the expiration date)"),
+          onChange: function onChange(value) {
+            return _onChange2(value == null ? void 0 : value.toString());
+          },
+          error: error == null ? void 0 : error.message //  disabled={isLoadingCustomForm}
+          ,
+          label: getRequiredOrOptionalFieldLabel(t("date_of_issue"), formFields == null ? void 0 : (_formFields$FORM_NAME47 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME47.required)
+        }, restField));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME48 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME48.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME49 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME49.required
+      },
+      control: control,
+      render: function render(_ref12) {
+        var _formFields$FORM_NAME50;
+
+        var field = _ref12.field,
+            error = _ref12.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select"),
+          label: getRequiredOrOptionalFieldLabel(t("country_of_issue"), formFields == null ? void 0 : (_formFields$FORM_NAME50 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME50.required),
+          options: locationsAsOptions,
+          loading: isLoadingLocations,
+          error: error == null ? void 0 : error.message,
+          disabled: isLoadingLocations
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME51 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME51.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
+      label: getRequiredOrOptionalFieldLabel(t("document_expedition_city"), formFields == null ? void 0 : (_formFields$FORM_NAME52 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME52.required) // error={errors[FORM_NAMES.document_expedition_city]?.message}
+      ,
+      placeholder: t("enter_city")
+    }, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME53 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME53.required,
+      pattern: {
+        value: (0,_pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.getNamePattern)(housingCountryCode),
+        message: t("cant_contain_number_and_symbols")
+      },
+      maxLength: {
+        value: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength,
+        message: t("max_length", {
+          length: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength
+        })
+      }
+    }), {
+      // disabled={isLoadingCustomForm}
+      autoCorrect: "off",
+      spellCheck: false
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME54 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.full_tourist_tax]) == null ? void 0 : _formFields$FORM_NAME54.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({}, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.full_tourist_tax, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME55 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.full_tourist_tax]) == null ? void 0 : _formFields$FORM_NAME55.required
+    }), {
+      label: getRequiredOrOptionalFieldLabel(t("full_tourist_tax"), formFields == null ? void 0 : (_formFields$FORM_NAME56 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.full_tourist_tax]) == null ? void 0 : _formFields$FORM_NAME56.required),
+      inputMode: "numeric",
+      placeholder: t("enter_full_tourist_tax"),
+      error: (_errors$FORM_NAMES$fu = errors[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.full_tourist_tax]) == null ? void 0 : _errors$FORM_NAMES$fu.message // disabled={isLoadingCustomForm}
+      ,
+      autoCorrect: "off",
+      spellCheck: false
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME57 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_country]) == null ? void 0 : _formFields$FORM_NAME57.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_country,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME58 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_country]) == null ? void 0 : _formFields$FORM_NAME58.required
+      },
+      control: control,
+      render: function render(_ref13) {
+        var _formFields$FORM_NAME59;
+
+        var _ref13$field = _ref13.field,
+            value = _ref13$field.value,
+            restField = _objectWithoutPropertiesLoose(_ref13$field, _excluded8),
+            error = _ref13.fieldState.error;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, {
+          placeholder: t("select"),
+          options: locationsAsOptions,
+          label: getRequiredOrOptionalFieldLabel(t("residence_country"), formFields == null ? void 0 : (_formFields$FORM_NAME59 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_country]) == null ? void 0 : _formFields$FORM_NAME59.required),
+          error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
+          ,
+          value: value,
+          onChange: function onChange(option) {
+            // if (option.value === COUNTRY_CODES.italy) {
+            setBirthCountry == null ? void 0 : setBirthCountry(option.value); // }
+          } // {...restField}
+
+        });
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME60 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_city]) == null ? void 0 : _formFields$FORM_NAME60.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
+      label: getRequiredOrOptionalFieldLabel(t("residence_city"), formFields == null ? void 0 : (_formFields$FORM_NAME61 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_city]) == null ? void 0 : _formFields$FORM_NAME61.required) // error={errors[FORM_NAMES.residence_city]?.message}
+      ,
+      placeholder: t("enter_city")
+    }, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_city, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME62 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_city]) == null ? void 0 : _formFields$FORM_NAME62.required,
+      pattern: {
+        value: (0,_pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.getNamePattern)(housingCountryCode),
+        message: t("cant_contain_number_and_symbols")
+      },
+      maxLength: {
+        value: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength,
+        message: t("max_length", {
+          length: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength
+        })
+      }
+    }), {
+      // disabled={isLoadingCustomForm}
+      autoCorrect: "off",
+      spellCheck: false
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME63 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.arrived_from_country]) == null ? void 0 : _formFields$FORM_NAME63.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_14__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.arrived_from_country,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME64 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.arrived_from_country]) == null ? void 0 : _formFields$FORM_NAME64.required
+      },
+      control: control,
+      render: function render(_ref14) {
+        var _formFields$FORM_NAME65;
+
+        var _ref14$field = _ref14.field,
+            value = _ref14$field.value,
+            restField = _objectWithoutPropertiesLoose(_ref14$field, _excluded9),
+            error = _ref14.fieldState.error;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, {
+          placeholder: t("select"),
+          options: locationsAsOptions,
+          label: getRequiredOrOptionalFieldLabel(t("arrived_from_country"), formFields == null ? void 0 : (_formFields$FORM_NAME65 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.arrived_from_country]) == null ? void 0 : _formFields$FORM_NAME65.required),
+          error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
+          ,
+          value: value,
+          onChange: function onChange(option) {
+            // if (option.value === COUNTRY_CODES.italy) {
+            setArrivalCountry == null ? void 0 : setArrivalCountry(option.value); // }
+          } // {...restField}
+
+        });
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME66 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_address]) == null ? void 0 : _formFields$FORM_NAME66.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({}, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_address, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME67 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_address]) == null ? void 0 : _formFields$FORM_NAME67.active
+    }), {
+      label: getRequiredOrOptionalFieldLabel(t("residence_address"), formFields == null ? void 0 : (_formFields$FORM_NAME68 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_address]) == null ? void 0 : _formFields$FORM_NAME68.required),
+      placeholder: t("enter_residence_address"),
+      error: (_errors$FORM_NAMES$re = errors[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_address]) == null ? void 0 : _errors$FORM_NAMES$re.message // disabled={isLoadingCustomForm}
+      ,
+      autoCorrect: "off",
+      spellCheck: false
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME69 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_postal_code]) == null ? void 0 : _formFields$FORM_NAME69.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
+      label: getRequiredOrOptionalFieldLabel(t("residence_postal_code"), formFields == null ? void 0 : (_formFields$FORM_NAME70 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_postal_code]) == null ? void 0 : _formFields$FORM_NAME70.required),
+      placeholder: t("enter_residence_postal_code")
+    }, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_postal_code, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME71 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_postal_code]) == null ? void 0 : _formFields$FORM_NAME71.required
+    }), {
+      error: (_errors$FORM_NAMES$re2 = errors[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.residence_postal_code]) == null ? void 0 : _errors$FORM_NAMES$re2.message // disabled={isLoadingCustomForm}
+      ,
+      inputMode: "numeric",
+      autoCorrect: "off",
+      spellCheck: false
+    }))), (formFields == null ? void 0 : (_formFields$FORM_NAME72 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.next_destination_address]) == null ? void 0 : _formFields$FORM_NAME72.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({}, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.next_destination_address, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME73 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.next_destination_address]) == null ? void 0 : _formFields$FORM_NAME73.active
+    }), {
+      label: getRequiredOrOptionalFieldLabel(t("next_destination_address"), formFields == null ? void 0 : (_formFields$FORM_NAME74 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.next_destination_address]) == null ? void 0 : _formFields$FORM_NAME74.required),
+      placeholder: t("enter_next_destination_address"),
+      error: (_errors$FORM_NAMES$ne = errors[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.next_destination_address]) == null ? void 0 : _errors$FORM_NAMES$ne.message // disabled={isLoadingCustomForm}
+      ,
+      autoCorrect: "off",
+      spellCheck: false
+    }))));
+  }, [citiesAsOptions, control, errors, formFields, getRequiredOrOptionalFieldLabel, housingCountryCode, isCitiesLoading, locationsAsOptions, register, setBirthCountry, setArrivalCountry, t, taxExcemptionsAsOptions, isLoadingLocations, isPurposesOfStayLoading, purposesOfStayAsOptions]);
   return {
     renderFormFields: renderFormFields
   };
@@ -23028,6 +23414,100 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 }
 
 module.exports = hoistNonReactStatics;
+
+
+/***/ }),
+
+/***/ "./node_modules/html-escaper/esm/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/html-escaper/esm/index.js ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "escape": function() { return /* binding */ escape; },
+/* harmony export */   "unescape": function() { return /* binding */ unescape; }
+/* harmony export */ });
+/**
+ * Copyright (C) 2017-present by Andrea Giammarchi - @WebReflection
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+var replace = ''.replace;
+
+var ca = /[&<>'"]/g;
+var es = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34);/g;
+
+var esca = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  "'": '&#39;',
+  '"': '&quot;'
+};
+var unes = {
+  '&amp;': '&',
+  '&#38;': '&',
+  '&lt;': '<',
+  '&#60;': '<',
+  '&gt;': '>',
+  '&#62;': '>',
+  '&apos;': "'",
+  '&#39;': "'",
+  '&quot;': '"',
+  '&#34;': '"'
+};
+
+function escape(es) {
+  return replace.call(es, ca, pe);
+};
+
+function unescape(un) {
+  return replace.call(un, es, cape);
+};
+
+function pe(m) {
+  return esca[m];
+}
+
+function cape(m) {
+  return unes[m];
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js ***!
+  \*******************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var void_elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! void-elements */ "./node_modules/void-elements/index.js");
+/* harmony import */ var void_elements__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(void_elements__WEBPACK_IMPORTED_MODULE_0__);
+var t=/\s([^'"/\s><]+?)[\s/>]|([^\s=]+)=\s?(".*?"|'.*?')/g;function n(n){var r={type:"tag",name:"",voidElement:!1,attrs:{},children:[]},i=n.match(/<\/?([^\s]+?)[/\s>]/);if(i&&(r.name=i[1],((void_elements__WEBPACK_IMPORTED_MODULE_0___default())[i[1]]||"/"===n.charAt(n.length-2))&&(r.voidElement=!0),r.name.startsWith("!--"))){var s=n.indexOf("--\x3e");return{type:"comment",comment:-1!==s?n.slice(4,s):""}}for(var a=new RegExp(t),c=null;null!==(c=a.exec(n));)if(c[0].trim())if(c[1]){var o=c[1].trim(),l=[o,""];o.indexOf("=")>-1&&(l=o.split("=")),r.attrs[l[0]]=l[1],a.lastIndex--}else c[2]&&(r.attrs[c[2]]=c[3].trim().substring(1,c[3].length-1));return r}var r=/<[a-zA-Z0-9\-\!\/](?:"[^"]*"|'[^']*'|[^'">])*>/g,i=/^\s*$/,s=Object.create(null);function a(e,t){switch(t.type){case"text":return e+t.content;case"tag":return e+="<"+t.name+(t.attrs?function(e){var t=[];for(var n in e)t.push(n+'="'+e[n]+'"');return t.length?" "+t.join(" "):""}(t.attrs):"")+(t.voidElement?"/>":">"),t.voidElement?e:e+t.children.reduce(a,"")+"</"+t.name+">";case"comment":return e+"\x3c!--"+t.comment+"--\x3e"}}var c={parse:function(e,t){t||(t={}),t.components||(t.components=s);var a,c=[],o=[],l=-1,m=!1;if(0!==e.indexOf("<")){var u=e.indexOf("<");c.push({type:"text",content:-1===u?e:e.substring(0,u)})}return e.replace(r,function(r,s){if(m){if(r!=="</"+a.name+">")return;m=!1}var u,f="/"!==r.charAt(1),h=r.startsWith("\x3c!--"),p=s+r.length,d=e.charAt(p);if(h){var v=n(r);return l<0?(c.push(v),c):((u=o[l]).children.push(v),c)}if(f&&(l++,"tag"===(a=n(r)).type&&t.components[a.name]&&(a.type="component",m=!0),a.voidElement||m||!d||"<"===d||a.children.push({type:"text",content:e.slice(p,e.indexOf("<",p))}),0===l&&c.push(a),(u=o[l-1])&&u.children.push(a),o[l]=a),(!f||a.voidElement)&&(l>-1&&(a.voidElement||a.name===r.slice(2,-1))&&(l--,a=-1===l?c:o[l]),!m&&"<"!==d&&d)){u=-1===l?c:o[l].children;var x=e.indexOf("<",p),g=e.slice(p,-1===x?void 0:x);i.test(g)&&(g=" "),(x>-1&&l+u.length>=0||" "!==g)&&u.push({type:"text",content:g})}}),c},stringify:function(e){return e.reduce(function(e,t){return e+a("",t)},"")}};/* harmony default export */ __webpack_exports__["default"] = (c);
+//# sourceMappingURL=html-parse-stringify.module.js.map
 
 
 /***/ }),
@@ -58494,6 +58974,306 @@ function I18nextProvider(_ref) {
 
 /***/ }),
 
+/***/ "./node_modules/react-i18next/dist/es/Trans.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-i18next/dist/es/Trans.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "nodesToString": function() { return /* binding */ nodesToString; },
+/* harmony export */   "Trans": function() { return /* binding */ Trans; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectWithoutProperties */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js");
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var html_parse_stringify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! html-parse-stringify */ "./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js");
+/* harmony import */ var html_escaper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! html-escaper */ "./node_modules/html-escaper/esm/index.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./context */ "./node_modules/react-i18next/dist/es/context.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils */ "./node_modules/react-i18next/dist/es/utils.js");
+
+
+
+var _excluded = ["format"],
+    _excluded2 = ["children", "count", "parent", "i18nKey", "context", "tOptions", "values", "defaults", "components", "ns", "i18n", "t", "shouldUnescape"];
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2__.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+
+
+
+function hasChildren(node, checkLength) {
+  if (!node) return false;
+  var base = node.props ? node.props.children : node.children;
+  if (checkLength) return base.length > 0;
+  return !!base;
+}
+
+function getChildren(node) {
+  if (!node) return [];
+  return node && node.children ? node.children : node.props && node.props.children;
+}
+
+function hasValidReactChildren(children) {
+  if (Object.prototype.toString.call(children) !== '[object Array]') return false;
+  return children.every(function (child) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child);
+  });
+}
+
+function getAsArray(data) {
+  return Array.isArray(data) ? data : [data];
+}
+
+function mergeProps(source, target) {
+  var newTarget = _objectSpread({}, target);
+
+  newTarget.props = Object.assign(source.props, target.props);
+  return newTarget;
+}
+
+function nodesToString(children, i18nOptions) {
+  if (!children) return '';
+  var stringNode = '';
+  var childrenArray = getAsArray(children);
+  var keepArray = i18nOptions.transSupportBasicHtmlNodes && i18nOptions.transKeepBasicHtmlNodesFor ? i18nOptions.transKeepBasicHtmlNodesFor : [];
+  childrenArray.forEach(function (child, childIndex) {
+    if (typeof child === 'string') {
+      stringNode += "".concat(child);
+    } else if ((0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child)) {
+      var childPropsCount = Object.keys(child.props).length;
+      var shouldKeepChild = keepArray.indexOf(child.type) > -1;
+      var childChildren = child.props.children;
+
+      if (!childChildren && shouldKeepChild && childPropsCount === 0) {
+        stringNode += "<".concat(child.type, "/>");
+      } else if (!childChildren && (!shouldKeepChild || childPropsCount !== 0)) {
+        stringNode += "<".concat(childIndex, "></").concat(childIndex, ">");
+      } else if (child.props.i18nIsDynamicList) {
+        stringNode += "<".concat(childIndex, "></").concat(childIndex, ">");
+      } else if (shouldKeepChild && childPropsCount === 1 && typeof childChildren === 'string') {
+        stringNode += "<".concat(child.type, ">").concat(childChildren, "</").concat(child.type, ">");
+      } else {
+        var content = nodesToString(childChildren, i18nOptions);
+        stringNode += "<".concat(childIndex, ">").concat(content, "</").concat(childIndex, ">");
+      }
+    } else if (child === null) {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("Trans: the passed in value is invalid - seems you passed in a null child.");
+    } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object') {
+      var format = child.format,
+          clone = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__.default)(child, _excluded);
+
+      var keys = Object.keys(clone);
+
+      if (keys.length === 1) {
+        var value = format ? "".concat(keys[0], ", ").concat(format) : keys[0];
+        stringNode += "{{".concat(value, "}}");
+      } else {
+        (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("react-i18next: the passed in object contained more than one variable - the object should look like {{ value, format }} where format is optional.", child);
+      }
+    } else {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("Trans: the passed in value is invalid - seems you passed in a variable like {number} - please pass in variables for interpolation as full objects like {{number}}.", child);
+    }
+  });
+  return stringNode;
+}
+
+function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts, shouldUnescape) {
+  if (targetString === '') return [];
+  var keepArray = i18nOptions.transKeepBasicHtmlNodesFor || [];
+  var emptyChildrenButNeedsHandling = targetString && new RegExp(keepArray.join('|')).test(targetString);
+  if (!children && !emptyChildrenButNeedsHandling) return [targetString];
+  var data = {};
+
+  function getData(childs) {
+    var childrenArray = getAsArray(childs);
+    childrenArray.forEach(function (child) {
+      if (typeof child === 'string') return;
+      if (hasChildren(child)) getData(getChildren(child));else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && !(0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child)) Object.assign(data, child);
+    });
+  }
+
+  getData(children);
+  var ast = html_parse_stringify__WEBPACK_IMPORTED_MODULE_4__.default.parse("<0>".concat(targetString, "</0>"));
+
+  var opts = _objectSpread(_objectSpread({}, data), combinedTOpts);
+
+  function renderInner(child, node, rootReactNode) {
+    var childs = getChildren(child);
+    var mappedChildren = mapAST(childs, node.children, rootReactNode);
+    return hasValidReactChildren(childs) && mappedChildren.length === 0 ? childs : mappedChildren;
+  }
+
+  function pushTranslatedJSX(child, inner, mem, i, isVoid) {
+    if (child.dummy) child.children = inner;
+    mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+      key: i
+    }), isVoid ? undefined : inner));
+  }
+
+  function mapAST(reactNode, astNode, rootReactNode) {
+    var reactNodes = getAsArray(reactNode);
+    var astNodes = getAsArray(astNode);
+    return astNodes.reduce(function (mem, node, i) {
+      var translationContent = node.children && node.children[0] && node.children[0].content && i18n.services.interpolator.interpolate(node.children[0].content, opts, i18n.language);
+
+      if (node.type === 'tag') {
+        var tmp = reactNodes[parseInt(node.name, 10)];
+        if (!tmp && rootReactNode.length === 1 && rootReactNode[0][node.name]) tmp = rootReactNode[0][node.name];
+        if (!tmp) tmp = {};
+        var child = Object.keys(node.attrs).length !== 0 ? mergeProps({
+          props: node.attrs
+        }, tmp) : tmp;
+        var isElement = (0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child);
+        var isValidTranslationWithChildren = isElement && hasChildren(node, true) && !node.voidElement;
+        var isEmptyTransWithHTML = emptyChildrenButNeedsHandling && (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && child.dummy && !isElement;
+        var isKnownComponent = (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(children) === 'object' && children !== null && Object.hasOwnProperty.call(children, node.name);
+
+        if (typeof child === 'string') {
+          var value = i18n.services.interpolator.interpolate(child, opts, i18n.language);
+          mem.push(value);
+        } else if (hasChildren(child) || isValidTranslationWithChildren) {
+            var inner = renderInner(child, node, rootReactNode);
+            pushTranslatedJSX(child, inner, mem, i);
+          } else if (isEmptyTransWithHTML) {
+          var _inner = mapAST(reactNodes, node.children, rootReactNode);
+
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          }), _inner));
+        } else if (Number.isNaN(parseFloat(node.name))) {
+          if (isKnownComponent) {
+            var _inner2 = renderInner(child, node, rootReactNode);
+
+            pushTranslatedJSX(child, _inner2, mem, i, node.voidElement);
+          } else if (i18nOptions.transSupportBasicHtmlNodes && keepArray.indexOf(node.name) > -1) {
+            if (node.voidElement) {
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(node.name, {
+                key: "".concat(node.name, "-").concat(i)
+              }));
+            } else {
+              var _inner3 = mapAST(reactNodes, node.children, rootReactNode);
+
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(node.name, {
+                key: "".concat(node.name, "-").concat(i)
+              }, _inner3));
+            }
+          } else if (node.voidElement) {
+            mem.push("<".concat(node.name, " />"));
+          } else {
+            var _inner4 = mapAST(reactNodes, node.children, rootReactNode);
+
+            mem.push("<".concat(node.name, ">").concat(_inner4, "</").concat(node.name, ">"));
+          }
+        } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && !isElement) {
+          var content = node.children[0] ? translationContent : null;
+          if (content) mem.push(content);
+        } else if (node.children.length === 1 && translationContent) {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          }), translationContent));
+        } else {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          })));
+        }
+      } else if (node.type === 'text') {
+        var wrapTextNodes = i18nOptions.transWrapTextNodes;
+
+        var _content = shouldUnescape ? (0,html_escaper__WEBPACK_IMPORTED_MODULE_5__.unescape)(i18n.services.interpolator.interpolate(node.content, opts, i18n.language)) : i18n.services.interpolator.interpolate(node.content, opts, i18n.language);
+
+        if (wrapTextNodes) {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(wrapTextNodes, {
+            key: "".concat(node.name, "-").concat(i)
+          }, _content));
+        } else {
+          mem.push(_content);
+        }
+      }
+
+      return mem;
+    }, []);
+  }
+
+  var result = mapAST([{
+    dummy: true,
+    children: children || []
+  }], ast, getAsArray(children || []));
+  return getChildren(result[0]);
+}
+
+function Trans(_ref) {
+  var children = _ref.children,
+      count = _ref.count,
+      parent = _ref.parent,
+      i18nKey = _ref.i18nKey,
+      context = _ref.context,
+      _ref$tOptions = _ref.tOptions,
+      tOptions = _ref$tOptions === void 0 ? {} : _ref$tOptions,
+      values = _ref.values,
+      defaults = _ref.defaults,
+      components = _ref.components,
+      ns = _ref.ns,
+      i18nFromProps = _ref.i18n,
+      tFromProps = _ref.t,
+      shouldUnescape = _ref.shouldUnescape,
+      additionalProps = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__.default)(_ref, _excluded2);
+
+  var _ref2 = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_context__WEBPACK_IMPORTED_MODULE_7__.I18nContext) || {},
+      i18nFromContext = _ref2.i18n,
+      defaultNSFromContext = _ref2.defaultNS;
+
+  var i18n = i18nFromProps || i18nFromContext || (0,_context__WEBPACK_IMPORTED_MODULE_7__.getI18n)();
+
+  if (!i18n) {
+    (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warnOnce)('You will need to pass in an i18next instance by using i18nextReactModule');
+    return children;
+  }
+
+  var t = tFromProps || i18n.t.bind(i18n) || function (k) {
+    return k;
+  };
+
+  if (context) tOptions.context = context;
+
+  var reactI18nextOptions = _objectSpread(_objectSpread({}, (0,_context__WEBPACK_IMPORTED_MODULE_7__.getDefaults)()), i18n.options && i18n.options.react);
+
+  var namespaces = ns || t.ns || defaultNSFromContext || i18n.options && i18n.options.defaultNS;
+  namespaces = typeof namespaces === 'string' ? [namespaces] : namespaces || ['translation'];
+  var defaultValue = defaults || nodesToString(children, reactI18nextOptions) || reactI18nextOptions.transEmptyNodeValue || i18nKey;
+  var hashTransKey = reactI18nextOptions.hashTransKey;
+  var key = i18nKey || (hashTransKey ? hashTransKey(defaultValue) : defaultValue);
+  var interpolationOverride = values ? tOptions.interpolation : {
+    interpolation: _objectSpread(_objectSpread({}, tOptions.interpolation), {}, {
+      prefix: '#$?',
+      suffix: '?$#'
+    })
+  };
+
+  var combinedTOpts = _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, tOptions), {}, {
+    count: count
+  }, values), interpolationOverride), {}, {
+    defaultValue: defaultValue,
+    ns: namespaces
+  });
+
+  var translation = key ? t(key, combinedTOpts) : defaultValue;
+  var content = renderNodes(components || children, translation, i18n, reactI18nextOptions, combinedTOpts, shouldUnescape);
+  var useAsParent = parent !== undefined ? parent : reactI18nextOptions.defaultTransParent;
+  return useAsParent ? (0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(useAsParent, additionalProps, content) : content;
+}
+
+/***/ }),
+
 /***/ "./node_modules/react-i18next/dist/es/context.js":
 /*!*******************************************************!*\
   !*** ./node_modules/react-i18next/dist/es/context.js ***!
@@ -75259,6 +76039,82 @@ module.exports = function shallowEqual(objA, objB, compare, compareContext) {
 
 /***/ }),
 
+/***/ "./node_modules/string-similarity/src/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/string-similarity/src/index.js ***!
+  \*****************************************************/
+/***/ (function(module) {
+
+module.exports = {
+	compareTwoStrings:compareTwoStrings,
+	findBestMatch:findBestMatch
+};
+
+function compareTwoStrings(first, second) {
+	first = first.replace(/\s+/g, '')
+	second = second.replace(/\s+/g, '')
+
+	if (first === second) return 1; // identical or empty
+	if (first.length < 2 || second.length < 2) return 0; // if either is a 0-letter or 1-letter string
+
+	let firstBigrams = new Map();
+	for (let i = 0; i < first.length - 1; i++) {
+		const bigram = first.substring(i, i + 2);
+		const count = firstBigrams.has(bigram)
+			? firstBigrams.get(bigram) + 1
+			: 1;
+
+		firstBigrams.set(bigram, count);
+	};
+
+	let intersectionSize = 0;
+	for (let i = 0; i < second.length - 1; i++) {
+		const bigram = second.substring(i, i + 2);
+		const count = firstBigrams.has(bigram)
+			? firstBigrams.get(bigram)
+			: 0;
+
+		if (count > 0) {
+			firstBigrams.set(bigram, count - 1);
+			intersectionSize++;
+		}
+	}
+
+	return (2.0 * intersectionSize) / (first.length + second.length - 2);
+}
+
+function findBestMatch(mainString, targetStrings) {
+	if (!areArgsValid(mainString, targetStrings)) throw new Error('Bad arguments: First argument should be a string, second should be an array of strings');
+	
+	const ratings = [];
+	let bestMatchIndex = 0;
+
+	for (let i = 0; i < targetStrings.length; i++) {
+		const currentTargetString = targetStrings[i];
+		const currentRating = compareTwoStrings(mainString, currentTargetString)
+		ratings.push({target: currentTargetString, rating: currentRating})
+		if (currentRating > ratings[bestMatchIndex].rating) {
+			bestMatchIndex = i
+		}
+	}
+	
+	
+	const bestMatch = ratings[bestMatchIndex]
+	
+	return { ratings: ratings, bestMatch: bestMatch, bestMatchIndex: bestMatchIndex };
+}
+
+function areArgsValid(mainString, targetStrings) {
+	if (typeof mainString !== 'string') return false;
+	if (!Array.isArray(targetStrings)) return false;
+	if (!targetStrings.length) return false;
+	if (targetStrings.find( function (s) { return typeof s !== 'string'})) return false;
+	return true;
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/styled-components/dist/styled-components.browser.esm.js":
 /*!******************************************************************************!*\
   !*** ./node_modules/styled-components/dist/styled-components.browser.esm.js ***!
@@ -76384,6 +77240,16 @@ module.exports = "<svg id=\"rubbish-bin\" xmlns=\"http://www.w3.org/2000/svg\" v
 
 /***/ }),
 
+/***/ "./src/assets/icons/search.svg":
+/*!*************************************!*\
+  !*** ./src/assets/icons/search.svg ***!
+  \*************************************/
+/***/ (function(module) {
+
+module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><defs><style>.a{fill:#fff;}.b{fill:none;}.c{fill:#1a8cff;stroke:#1a8cff;stroke-width:0.5px;}</style></defs><rect class=\"a\" width=\"20\" height=\"20\" rx=\"3\"></rect><g transform=\"translate(3 3)\"><rect class=\"b\" width=\"14\" height=\"14\"></rect><path class=\"c\" d=\"M13.938,12.71,11.045,9.818a6,6,0,0,0,1.227-3.682A6.1,6.1,0,0,0,6.136,0,6.1,6.1,0,0,0,0,6.136a6.1,6.1,0,0,0,6.136,6.136,6,6,0,0,0,3.682-1.227l2.893,2.893ZM1.753,6.136A4.34,4.34,0,0,1,6.136,1.753a4.34,4.34,0,0,1,4.383,4.383,4.34,4.34,0,0,1-4.383,4.383A4.34,4.34,0,0,1,1.753,6.136Z\"></path></g></svg>"
+
+/***/ }),
+
 /***/ "./src/assets/icons/user-error.svg":
 /*!*****************************************!*\
   !*** ./src/assets/icons/user-error.svg ***!
@@ -76404,6 +77270,37 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" title=\"arrow_right\
 
 /***/ }),
 
+/***/ "./node_modules/void-elements/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/void-elements/index.js ***!
+  \*********************************************/
+/***/ (function(module) {
+
+/**
+ * This file automatically generated from `pre-publish.js`.
+ * Do not manually edit.
+ */
+
+module.exports = {
+  "area": true,
+  "base": true,
+  "br": true,
+  "col": true,
+  "embed": true,
+  "hr": true,
+  "img": true,
+  "input": true,
+  "link": true,
+  "meta": true,
+  "param": true,
+  "source": true,
+  "track": true,
+  "wbr": true
+};
+
+
+/***/ }),
+
 /***/ "./src/translations/checkinOnlineTextsEN.json":
 /*!****************************************************!*\
   !*** ./src/translations/checkinOnlineTextsEN.json ***!
@@ -76411,7 +77308,7 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" title=\"arrow_right\
 /***/ (function(module) {
 
 "use strict";
-module.exports = JSON.parse("{\"documents\":{\"passport\":\"Passport\",\"identity_card\":\"Identity Card\",\"driving_license\":\"Driving License\",\"driving_licence\":\"Driving License\",\"drivers_license\":\"Drivers license\",\"other\":\"Other\",\"foreign_document\":\"Foreign Document\",\"residence_permit\":\"Residence Permit\",\"foreigner_id\":\"Foreigner ID\",\"diplomatic_id\":\"Diplomatic ID\",\"driving_licence_cz\":\"Driving Licence\",\"driving_licence_gr\":\"Driving Licence\",\"army_id_gr\":\"Army ID\",\"work_permit_gr\":\"Work permit\",\"identity_card_paper\":\"Italian Identity Card (Paper)\",\"driving_licence_eu\":\"Driving Licence\",\"diplomatic_passport\":\"Diplomatic passport\",\"service_passport\":\"Service passport\",\"identity_certificate\":\"Certificate of Identity\",\"identity_diplomatic\":\"Diplomatic ID\",\"other_document\":\"Other Document\",\"border_pass\":\"Border pass\",\"children_citizens_slovenian\":\"Children, citizens of the Republic of Slovenia, without a document\",\"travel_documents\":\"Travel documents under an international agreement\",\"administrative_documents\":\"Administrative documents\",\"weapon_certificate\":\"Weapon certificate\",\"dni\":\"DNI\",\"driving_licence_es\":\"Driving License (ES)\",\"spanish_residence_permit\":\"Spanish Residence Permit (NIE)\",\"eu_residence_permit\":\"EU Residence Permit\",\"driving_licence_gb\":\"Driving Licence\",\"tess__app_to_ag_custodia\":\"TESS. APP.TO AG.CUSTODIA\",\"tess__sott_li_ag_custodia\":\"TESS. SOTT.LI AG.CUSTODIA\",\"tess__uff_li_ag_custodia\":\"TESS. UFF.LI AG.CUSTODIA\",\"tess__militare_truppa_a_m\":\"TESS. MILITARE TRUPPA A.M\",\"tess__sottufficiali_a_m_\":\"TESS. SOTTUFFICIALI A.M.\",\"tess__ufficiali_a_m_\":\"TESS. UFFICIALI A.M.\",\"tess__app_to_carabinieri\":\"TESS. APP.TO CARABINIERI\",\"tess__sottufficiali_cc\":\"TESS. SOTTUFFICIALI CC\",\"tess__ufficiale\":\"TESS. UFFICIALE\",\"tess__ag__e_ag_sc__c_f_s_\":\"TESS. AG. E AG.SC. C.F.S.\",\"tess__sottuficiali_c_f_s_\":\"TESS. SOTTUFICIALI C.F.S.\",\"tess__ufficiali_c_f_s_\":\"TESS. UFFICIALI C.F.S.\",\"tess__s_i_s_d_e_\":\"TESS. S.I.S.D.E.\",\"tess__militare_e_i_\":\"TESS. MILITARE E.I.\",\"tess__sottufficiali_e_i_\":\"TESS. SOTTUFFICIALI E.I.\",\"tess__ufficiali_e_i_\":\"TESS. UFFICIALI E.I.\",\"tess__app_to_finanziere\":\"TESS. APP.TO FINANZIERE\",\"tess__sott_li_g_d_f_\":\"TESS. SOTT.LI G.D.F.\",\"tess__pol__trib__g_d_f_\":\"TESS. POL. TRIB. G.D.F.\",\"tess__ufficiali_g_d_f_\":\"TESS. UFFICIALI G.D.F.\",\"tess__pers__magistrati\":\"TESS. PERS. MAGISTRATI\",\"tess__milit__m_m_\":\"TESS. MILIT. M.M.\",\"tess__sottuficiali_m_m_\":\"TESS. SOTTUFICIALI M.M.\",\"tess__ufficiali_m_m_\":\"TESS. UFFICIALI M.M.\",\"tess__parlamentari\":\"TESS. PARLAMENTARI\",\"patente_nautica\":\"PATENTE NAUTICA\",\"porto_fucile_uso_caccia\":\"PORTO FUCILE USO CACCIA\",\"porto_fucile_dif__person_\":\"PORTO FUCILE DIF. PERSON.\",\"porto_darmi_uso_sportivo\":\"PORTO D'ARMI USO SPORTIVO\",\"porto_pistola_dif__person\":\"PORTO PISTOLA DIF. PERSON\",\"porto_darmi_guardie_giur\":\"PORTO D'ARMI GUARDIE GIUR\",\"tess__ispettori_p_p_\":\"TESS. ISPETTORI P.P.\",\"tess__sovrintendenti_p_p_\":\"TESS. SOVRINTENDENTI P.P.\",\"tess__ufficiali_p_p_\":\"TESS. UFFICIALI P.P.\",\"tess__polizia_femminile\":\"TESS. POLIZIA FEMMINILE\",\"tess__funzionari_p_s_\":\"TESS. FUNZIONARI P.S.\",\"tess__ispettori_p_s_\":\"TESS. ISPETTORI P.S.\",\"tess__sovrintendenti_p_s_\":\"TESS. SOVRINTENDENTI P.S.\",\"tess__ufficiali_p_s_\":\"TESS. UFFICIALI P.S.\",\"titolo_viaggio_rif_polit_\":\"TITOLO VIAGGIO RIF.POLIT.\",\"tess__milit__truppa_sismi\":\"TESS. MILIT. TRUPPA SISMI\",\"tess__sottufficiali_sismi\":\"TESS. SOTTUFFICIALI SISMI\",\"tess__ufficiali_sismi\":\"TESS. UFFICIALI SISMI\",\"tess__iscriz__albo_odont_\":\"TESS. ISCRIZ. ALBO ODONT.\",\"tes__unico_per_la_camera\":\"TES. UNICO PER LA CAMERA\",\"tess__corte_dei_conti\":\"TESS. CORTE DEI CONTI\",\"tes__doganale_ril_min_fin_\":\"TES. DOGANALE RIL.MIN.FIN.\",\"tess__ferrov__senato\":\"TESS. FERROV. SENATO\",\"tess__min_pubb_istruzione\":\"TESS. MIN.PUBB.ISTRUZIONE\",\"tess__militare_nato\":\"TESS. MILITARE NATO\",\"tes__ente_naz__assis_volo\":\"TES. ENTE NAZ. ASSIS.VOLO\",\"tess__min_polit_agric_for_\":\"TESS. MIN.POLIT.AGRIC.FOR.\",\"tess__min__affari_esteri\":\"TESS. MIN. AFFARI ESTERI\",\"tess__iscr_albo_architetti\":\"TESS. ISCR.ALBO ARCHITETTI\",\"tessera_iscr__albo_avvoc_\":\"TESSERA ISCR. ALBO AVVOC.\",\"tess__corte_dappello\":\"TESS. CORTE D'APPELLO\",\"tess__consiglio_di_stato\":\"TESS. CONSIGLIO DI STATO\",\"tessera_riconosc__d_i_a_\":\"TESSERA RICONOSC. D.I.A.\",\"tess__membro_equip__aereo\":\"TESS. MEMBRO EQUIP. AEREO\",\"tess__iscr__albo_ingegneri\":\"TESS. ISCR. ALBO INGEGNERI\",\"tess__ministero_lavori_pu\":\"TESS. MINISTERO LAVORI PU\",\"tess__min_ben_e_att_cult_\":\"TESS. MIN.BEN.E ATT.CULT.\",\"tess__ministero_difesa\":\"TESS. MINISTERO DIFESA\",\"tess__ministero_finanze\":\"TESS. MINISTERO FINANZE\",\"tess__ministero_giustizia\":\"TESS. MINISTERO GIUSTIZIA\",\"tess__ministero_interno\":\"TESS. MINISTERO INTERNO\",\"tess__ministero_sanita\":\"TESS. MINISTERO SANITA'\",\"tess__ministero_tesoro\":\"TESS. MINISTERO TESORO\",\"tessera_dellordine_notai\":\"TESSERA DELL'ORDINE NOTAI\",\"tess__ordine_giornalisti\":\"TESS. ORDINE GIORNALISTI\",\"tess__pres_za_cons__min_\":\"TESS. PRES.ZA CONS. MIN.\",\"tess__pubblica_istruzione\":\"TESS. PUBBLICA ISTRUZIONE\",\"tes__poste_e_telecomunic_\":\"TES. POSTE E TELECOMUNIC.\",\"tessera_u_n_u_c_i_\":\"TESSERA U.N.U.C.I.\",\"tess__identif_telecom_it_\":\"TESS. IDENTIF.TELECOM IT.\",\"tes__ferroviaria_deputati\":\"TES. FERROVIARIA DEPUTATI\",\"tes__ferrov__ex_deputati\":\"TES. FERROV. EX DEPUTATI\",\"tess__sott_li_vig__urbani\":\"TESS. SOTT.LI VIG. URBANI\",\"tess__uff_li_vig_urbani\":\"TESS. UFF.LI VIG.URBANI\",\"tess__sottuff_li_vv_ff_\":\"TESS. SOTTUFF.LI VV.FF.\",\"tess__ufficiali_vv_ff_\":\"TESS. UFFICIALI VV.FF.\",\"tess__agenti/ass_ti_p_p_\":\"TESS. AGENTI/ASS.TI P.P.\",\"tess__agenti/ass_ti_p_s_\":\"TESS. AGENTI/ASS.TI P.S.\",\"tess__iscr__albo_med/chi_\":\"TESS. ISCR. ALBO MED/CHI.\",\"tess__app_to/vig__vv_ff_\":\"TESS. APP.TO/VIG. VV.FF.\",\"tess__app_to/vig__urbano\":\"TESS. APP.TO/VIG. URBANO\",\"tess__minist__trasp/navig\":\"TESS. MINIST. TRASP/NAVIG\"},\"english\":\"English\",\"spanish\":\"Spanish\",\"italian\":\"Italian\",\"french\":\"French\",\"hungarian\":\"Hungarian\",\"russian\":\"Russian\",\"german\":\"German\",\"czech_adjective\":\"Czech\",\"online_checkin\":\"Online Check-in\",\"confirm_booking_details\":\"Confirm Booking Details\",\"check_in_date\":\"Check-in Date\",\"select_nationality_and_document_to_continue\":\"First, select your nationality and the document type to continue.\",\"check_out_date\":\"Check-out Date\",\"adults\":\"Adults\",\"error_sad_face\":\"Error :(\",\"children_under_number\":\"Children (under {{number}})\",\"next\":\"Next\",\"next_step\":\"Next step\",\"oops\":\"Ooops!\",\"reservation_loading_error\":\"We’re having some problems finding your reservation. Please, contact your host and tell him to send the link again\",\"link_expired_loading_error\":\"The link has expired. Please, go back to the email or message and click on the link again. Still expired? Contact you host and tell him to send the link again\",\"required\":\"Required\",\"min_number_is\":\"Minimum number is {{number}}\",\"max_number_is\":\"Maximum number is {{number}}\",\"min_number_is_short\":\"Min number is {{number}}\",\"max_number_is_short\":\"Max number is {{number}}\",\"error\":\"Error\",\"number_of_guests\":\"Number of guests\",\"back_button\":\"Back\",\"back\":\"Back\",\"add_personal_data\":\"Add Personal Data\",\"january\":\"January\",\"february\":\"February\",\"march\":\"March\",\"april\":\"April\",\"may\":\"May\",\"june\":\"June\",\"july\":\"July\",\"august\":\"August\",\"september\":\"September\",\"october\":\"October\",\"november\":\"November\",\"december\":\"December\",\"day\":\"Day\",\"month\":\"Month\",\"year\":\"Year\",\"birth_date\":\"Birth Date\",\"name\":\"Name\",\"enter_name\":\"Enter Name\",\"incomplete_personal_data\":\"Incomplete Personal Data\",\"at_least_one_field_is_missing\":\"At least one field is missing. Missing fields are highlighted in red. Please complete your personal data before continuing.\",\"ok\":\"Ok\",\"male\":\"Male\",\"female\":\"Female\",\"sex\":\"Sex\",\"language\":\"Language\",\"nationality\":\"Nationality\",\"doc_type\":\"Document type\",\"surname\":\"Surname\",\"enter_surname\":\"Enter Surname\",\"second_surname\":\"Second Surname\",\"enter_second_surname\":\"Enter Second Surname\",\"fiscal_code\":\"Fiscal code\",\"invalid_fiscal_code\":\"Invalid fiscal code\",\"doc_number\":\"Document Number\",\"enter_doc_number\":\"Enter Document Number\",\"doc_number_dni_format_error\":\"Incorrect format (it should be 99999999X)\",\"doc_number_nie_format_error\":\"Incorrect format (it should be X9999999X)\",\"date_of_issue\":\"Date of Issue\",\"cant_be_equal_or_greater_than_today\":\"Can't be equal or greater than actual date\",\"cant_contain_number_and_symbols\":\"Can't contain numbers and symbols\",\"cant_be_equal_or_smaller_than_birth_date\":\"Can't be equal or smaller than birth date\",\"cant_be_equal_or_after_than_issue_date\":\"Can’t be equal or after than date of issue\",\"country_of_birth\":\"Country of birth\",\"residence_country\":\"Residence Country\",\"residence_province\":\"Residence province\",\"country_of_issue\":\"Document Expedition Country\",\"city_of_birth\":\"City of Birth\",\"enter_city_of_birth\":\"Enter City of Birth\",\"city_of_issue\":\"Document Expedition City\",\"residence_city\":\"Residence City\",\"enter_residence_city\":\"Enter Residence City\",\"enter_issue_city\":\"Enter Document Expedition City\",\"residence_address\":\"Residence Address\",\"enter_residence_address\":\"Enter Residence Address\",\"next_destination_country\":\"Next Destination Country\",\"next_destination_city\":\"Next Destination City\",\"enter_next_destination_city\":\"Enter Next Destination City\",\"next_destination_address\":\"Next Destination Address\",\"enter_next_destination_address\":\"Enter Next Destination Address\",\"residence_postal_code\":\"Residence Postal Code\",\"enter_residence_postal_code\":\"Enter Residence Postal Code\",\"citizenship\":\"Citizenship\",\"visa_number_eu\":\"Visa Number (non EU Citizens)\",\"enter_visa_number\":\"Enter Visa Number\",\"purpose_of_stay\":\"Purpose of stay\",\"next_destination_district\":\"Next Destination District\",\"next_destination_municipality\":\"Next Destination Municipality\",\"arrived_from_country\":\"Arrived From Country\",\"arrived_from_district\":\"Arrived From District\",\"arrived_from_municipality\":\"Arrived From Municipality\",\"capture\":\"Capture\",\"frontside\":\"FRONTSIDE\",\"where_the_photo_is\":\"Where the photo is\",\"keep_your_doc_inside_the_box\":\"Keep your document inside the box\",\"capture_id\":\"Capture ID\",\"success\":\"Success\",\"where_the_mrz_code_is\":\"Where the <1>MRZ Code</1> is\",\"backside\":\"BACKSIDE\",\"single_page_that_contains_all_the_data\":\"Single page that contains all the data\",\"scan_passport\":\"Scan passport\",\"scan_document\":\"Scan document\",\"hope_you_will_come_back_soon\":\"Hope you will come back soon!\",\"powered_by\":\"Powered by\",\"expired_link_message\":\"The online check-in is no longer available for this reservation.\",\"signature_placeholder_text\":\"Tap to Sign here\",\"repeat\":\"Repeat\",\"sign\":\"Sign\",\"signature_screen_top_text\":\"Now, please add your signature.\",\"clear\":\"Clear\",\"terms_and_conditions_link\":\"https://chekin.com/en/generic-privacy-policy-of-accommodations/\",\"terms_and_conditions_link_super_hog\":\"https://superhog.com/privacy-policydata-protection-policy/\",\"i_accept\":\"I accept\",\"terms_and_conditions\":\"Privacy Policy\",\"contract_checkbox_label\":\"I read and accept the contract.\",\"loading_contract\":\"Loading contract...\",\"contract_loading_error\":\"Contract loading error\",\"try_again\":\"Try again\",\"you_have_to_sign\":\"You have to sign before continuing.\",\"log_out\":\"Log out\",\"please_sign_and_accept_terms_and_contract\":\"Please sign inside the box. You can use your finger or mouse. Don’t forget to <1>accept the contract and the Terms and Conditions.</1>\",\"please_sign_and_accept_terms\":\"Please sign inside the box. You can use your finger or mouse. Don’t forget to accept <1>Terms and Conditions.</1>\",\"sign_now\":\"Sign now\",\"authorities_mark_mandatory_to_accept\":\"In order to continue  with the registration you must accept the <1>Privacy Policy</1>.\",\"authorities_mark_mandatory_to_accept_contract\":\"In order to continue with the registration you must accept the <1>contract</1> and the <1>Privacy Policy</1>.\",\"please_accept_terms_and_conditions\":\"Please, accept the Privacy Policy\",\"accept_terms_and_conditions\":\"ACCEPT POLICY\",\"view_contract\":\"View Contract\",\"successfully_completed\":\"Successfully Completed!\",\"share_checkin_link\":\"Share check-in link\",\"register_another_guest\":\"REGISTER ANOTHER GUEST\",\"checkin_status\":\"Check-in Status\",\"registered\":\"registered\",\"collapse\":\"Collapse\",\"more_guest\":\"MORE GUEST\",\"share_online_checkin\":\"Share Online Check-In\",\"copied\":\"Copied!\",\"copy_link\":\"COPY LINK\",\"copy_link_lowwer\":\"Copy Link\",\"or_share_by\":\"Or share by:\",\"please_accept_contract_and_terms_and_conditions\":\"Please, accept the Privacy Policy and Contract\",\"accept\":\"ACCEPT POLICY & CONTRACT\",\"sending_your_data\":\"Completing your registration...\",\"it_could_take_seconds\":\"It could take a couple of seconds\",\"we_found_error\":\"We have found an error.\",\"try_again_or_contact\":\"Please try again. If the error persists, contact our support team.\",\"to_send_you_key_you_have_to\":\"To send you the virtual key you have to complete 2 simple steps\",\"capture_id_passport\":\"Capture your ID/Passport\",\"pay\":\"Pay\",\"paid\":\"Paid!\",\"paid_without_exclamation_mark\":\"Paid\",\"verify_your_identity\":\"Verify your identity\",\"capture_id_or_passport\":\"CAPTURE YOUR ID OR PASSPORT\",\"please_capture_side_with_photo\":\"Please do capture the side that contains your photo\",\"take_a_selfie\":\"Take a selfie\",\"take_a_selfie_tips\":\"Now take a selfie and we will compare both photos. Remove anything that could make you look different (like glasses, hats…)\",\"keep_your_face_inside_the_blue_square\":\"Keep your face inside the blue square\",\"success_exclamation\":\"Success!\",\"identity_verification_success_title\":\"Success!\",\"identity_verification_success_text\":\"When all the guests of the reservation have completed the online check-in, you will receive an email with the virtual key and the entry instructions.\",\"scanning\":\"Scanning...\",\"cancel\":\"Cancel\",\"error_again\":\"Error again\",\"sadly_error_persists\":\"Sadly, the error persists.\",\"you_are_registered_but_we_cannot_send_key\":\"You are already registered but we cannot send you the virtual key because the biometric match has failed twice.\",\"please_contact_support_team\":\"Please contact our support team.\",\"finish\":\"Finish\",\"comparing\":\"Comparing...\",\"we_are_comparing_doc_and_selfie\":\"We are comparing your photo from your document with your selfie.\",\"detecting\":\"Detecting...\",\"we_are_detecting_your_face\":\"We are detecting your face.\",\"matching\":\"Matching\",\"try_again_please\":\"Try again please.\",\"passport_photo\":\"Passport\\n photo\",\"selfie_photo\":\"Selfie\\n photo\",\"no_options\":\"No options\",\"start_typing\":\"Start typing...\",\"optional\":\"Optional\",\"tax_exemption\":\"Tax exemption\",\"exemption\":\"Exemption\",\"tax_id\":\"Tax ID\",\"matching_error\":\"Matching Error\",\"identity_verification_error_text\":\"Make sure to take a picture of the document first and then a selfie\",\"the_docs_you_can_use_depend_on_nat\":\"The docs you can use depend on your nationality:\",\"it_depends_on_your_nationality\":\"It depeneds on your nationality:\",\"europeans\":\"Europeans\",\"nationality_identity_document\":\"National Identity Document, Passport, Residence Permit, Driving License\",\"non_europeans\":\"Non-Europeans\",\"what_document_type\":\"What documents should I use?\",\"foreign_document\":\"Foreign document\",\"foreigner_id\":\"Foreigner ID\",\"diplomatic_id\":\"Diplomatic ID\",\"colombians\":\"Colombians\",\"p_id_documents\":\"Passport, Colombian ID\",\"non_colombians\":\"Non-Colombians\",\"p_residence_permit_did_foreign_documents\":\"Passport, Residence Permit, Diplomatic ID, Foreign Document\",\"austria\":\"Austria\",\"belgium\":\"Belgium\",\"colombia\":\"Colombia\",\"czech\":\"Czech Republic\",\"france\":\"France\",\"germany\":\"Germany\",\"italy\":\"Italy\",\"netherlands\":\"Netherlands\",\"portugal\":\"Portugal\",\"spain\":\"Spain\",\"thailand\":\"Thailand\",\"non-thailand\":\"Non-Thailand\",\"uae\":\"United Arab Emirates\",\"non-uae\":\"Non-United Arab Emirates\",\"uk\":\"United Kingdom\",\"passport_id\":\"Passport, ID\",\"passport_id_other\":\"Passport, ID, Other\",\"passport_other\":\"Passport, Other\",\"passport_id_dr_lic\":\"Passport, ID, Driving License\",\"passport_id_dip_p\":\"ID, Passport, Diplomatic Passport\",\"id_cert_doc_p_dr_lic_serv_p\":\"ID, Certificate Document, Passport, Driving Licence, Service Passport\",\"p_srp_eurp\":\"Passport, Spanish Residence Permit, EU Residence Permit\",\"residence_permit\":\"Residence permit\",\"passport\":\"Passport\",\"scan_id_passport\":\"Scan ID / Passport\",\"you_have_two_ways_to_add_data\":\"You have <1>two ways</1> to add your personal data as it is required by law.\",\"add_data_manually\":\"Add data manually\",\"or\":\"Or\",\"could_not_detect\":\"Could not detect.\",\"scan_where_mrz_code_is\":\"Scan your ID or passport by the side where the <1>MRZ code</1> is.\",\"please_review_your_data\":\"Please review your data.\",\"be_sure_that_data_correct\":\"Please be sure that all your data has been entered correctly before going through the next step.\",\"review_data\":\"REVIEW DATA\",\"saving\":\"Saving\",\"phone\":\"Phone\",\"email\":\"Email\",\"invalid_email\":\"Invalid email\",\"enter_your_phone_number\":\"Enter your phone\",\"phone_number\":\"Phone number\",\"search\":\"Search\",\"learn_more\":\"Learn More\",\"no_results\":\"No results found\",\"date_when_the_doc_created\":\"Date when the document was created. (It is <1>not</1> the expiration date)\",\"block_deposit_amount\":\"According to the deposit policy, we will block the listed deposit amount from a credit card. The deposit <1>will be returned</1> after the end of your stay if no damage occurs.\",\"only_basic_letters_are_allowed\":\"Only basic letters and numbers characters are allowed\",\"doc_number_dni_letter_error\":\"Wrong DNI Letter (check the DNI number)\",\"doc_number_dl_letter_error\":\"Wrong DL Letter (check the DL number)\",\"doc_number_nie_letter_error\":\"Wrong NIE Letter (check the NIE number)\",\"scanner_cannot_detect_try_to_add_manually\":\"The scanner cannot detect your document correctly, please try to add your information manually.\",\"compatibility_error\":\"Compatibility Error\",\"please_try_safari\":\"Due to Apple restrictions, the camera doesn’t work in other browsers like Chrome, only works in Safari. Open the page in Safari for a better experience.\",\"please_try_a_different_browser\":\"Your camera doesn't work in this browser. Please, try to open the link in a different browser.\",\"max_length\":\"Cannot exceed {{length}} characters\",\"incorrect_length\":\"Incorrect length\",\"error_boundary_title\":\"We are investigating the error\",\"error_boundary_message\":\"We have smart people investigating what is wrong and we will get a solution very soon. Please come back in a couple of minutes or refresh the page.\",\"describe_what_happened\":\"What happened? Please describe in details what you were doing before the error\",\"security_deposit\":\"Security Deposit\",\"would_you_like_to_make_deposit\":\"Would you like to make your deposit now?\",\"you_can_make_deposit_before_arriving\":\"You can make the deposit before arriving.\",\"deposit_amount\":\"Deposit amount\",\"i_accept_deposit_rules\":\"By clicking in accept I do consent to retain the deposit amount from my credit card.\",\"the_amount_will_be_released_on_date\":\"The amount will be released on {{date}}\",\"make_your_deposit_now\":\"MAKE YOUR DEPOSIT NOW\",\"it_is_mandatory_to_deposit\":\"It is mandatory to block the deposit amount to complete the registration. Don't worry, the amount will be just temporary blocked, we are not going to charge you.\",\"do_it_at_accommodation\":\"Do it at the accommodation\",\"your_deposit_has_been_made\":\"Your security deposit has been successfully paid. The amount will be automatically released when your reservation ends.\",\"taxes\":\"Taxes\",\"proceed_to_payment\":\"Proceed to payment\",\"pay_at_the_accommodation\":\"Pay at the accommodation\",\"payment\":\"Payment\",\"you_have_to_pay\":\"You have to pay\",\"amount_will_be_blocked_from_card\":\"<0>{{amount}}{{currency_sign}}</0> will be blocked from your credit card\",\"pay_now\":\"Pay now\",\"pay_later\":\"Pay later\",\"credit_card\":\"Credit card\",\"download_deposit_terms\":\"Download deposit terms\",\"download_invoice\":\"Download invoice\",\"damage_protection\":\"Damage protection\",\"confirm_and_pay\":\"Confirm and Pay\",\"payment_card_details\":\"Payment card details\",\"payment_method\":\"Payment method\",\"price_details\":\"Price details\",\"save_details\":\"Save details\",\"cardholder_name\":\"Full Name (as it is on the payment card)\",\"cardholder_name_short\":\"CARD HOLDER\",\"age\":\"Age\",\"enter_age\":\"Enter age\",\"tourist_taxes_are_mandatory_in_countries\":\"Touristic taxes are mandatory in some territories\",\"depending_on_country_you_pay_taxes\":\"Depending on the country or region, you may be subject to pay taxes.\",\"taxes_may_vary\":\"Taxes may vary also depending on the place, age of the guests, days of stay…\",\"you_have_to_pay_taxes\":\"By law, you have to pay tourist taxes in this region\",\"total_taxes\":\"Total taxes\",\"exceptions\":\"Exceptions\",\"none\":\"None\",\"you_payment_has_been_made\":\"Your payment has been made\",\"you_payment_has_been_made_successfully\":\"Your payment has been made successfully\",\"payment_creds_already_added\":\"Your card details are already added.\",\"calced_price_is_incorrect\":\"We have troubles calculating your correct price.\",\"calced_price_not_found\":\"We have troubles calculating your price.\",\"loading\":\"Loading\",\"card_number\":\"Card number\",\"expiry_date\":\"Expiry date\",\"continue\":\"Continue\",\"missing_payment_secure_link\":\"Payment 3D Secure link is missing\",\"camera_permissions_denied\":\"The camera doesn't open? Make sure to <2>allow the browser permission</2> to use the camera.\",\"guest\":\"Guest\",\"attach_document\":\"Attach document\",\"onboarding_setup\":\"Onboarding setup\",\"onboarding\":\"Onboarding\",\"payments\":\"Payments\",\"skip\":\"Skip\",\"submit\":\"Submit\",\"identification_error\":\"Identification error\",\"it_is_mandatory_to_pay_for_your_booking\":\"It is mandatory to pay for your booking before completing the registration.\",\"safe_and_secure_payment\":\"100% Safe and Secure Payment\",\"deposit_policy\":\"Deposit Policy\",\"booking\":\"Booking\",\"tourist_taxes\":\"Tourist Taxes\",\"taxes_amount\":\"Taxes Amount\",\"extra_services\":\"Extra Services\",\"total\":\"Total\",\"total_payment\":\"Total payment\",\"completed_exclamation\":\"Completed!\",\"your_checkin_has_been_completed\":\"Your check-in has been completed successfully.\",\"subtotal\":\"Subtotal\",\"transaction_fee\":\"Transaction fee\",\"payment_successful\":\"Payment successful\",\"check_in_check_out\":\"Check-in → Check-out\",\"enter_email\":\"Enter email\",\"lead_guest_name\":\"Lead guest name\",\"lead_guest_email\":\"Lead guest email\",\"enter_number\":\"Enter number\",\"type_of_registration\":\"Type of registration\",\"select_your_type_of_registration\":\"Select your type of registration\",\"single\":\"Single\",\"group\":\"Group\",\"family\":\"Family\",\"creating\":\"Creating\",\"confirm\":\"Confirm\",\"searching\":\"Searching\",\"identetify_verification_error_can_proceed\":\"We couldn't verify your identity but you can continue to complete the registration. Your host might have to verify the photos manually.\",\"guest_name_registered\":\"<0>{{guestName}}</0> is registered\",\"expand\":\"Expand\",\"dont_have_your_guests_question\":\"Don’t have your guests with you?\",\"share_this_link_to_guests\":\"Share this link so they can complete the online check-in themselves.\",\"ill_finish_later\":\"I'll finish later\",\"register\":\"Register\",\"number_pending_guests\":\"{{number}} pending guests\",\"number_pending_guest\":\"{{number}} pending guest\",\"guest_name\":\"Guest Name\",\"retry\":\"Retry\",\"share_page\":\"Share Page\",\"share_by_email\":\"Share by email\",\"guests_verified\":\"Guests, verified\",\"share_by_whatsapp\":\"Share by WhatsApp\",\"identity_verification\":\"Identity Verification\",\"retry_identity_verification_error_text\":\"Your photos don't match but you can continue with your registration. Your host will review them.\",\"verification_pending\":\"Verification Pending\",\"verified\":\"Verified!\",\"your_identity_verified_successfully\":\"Your identity has been verified successfully.\",\"photo_dont_match_but_continue\":\"Your photos don't match but you can continue with your registration. Your host will review them or you can try one more time.\",\"identity_verification_pending\":\"Identity Verification Pending\",\"identity_verification_completed\":\"Identity Verification Completed\",\"identity_verification_completed_text\":\"All guest have been successfully identified. You're all set and read to enjoy your stay!\",\"approved\":\"Approved\",\"complete_online_checkin_email_subject\":\"Complete the Online check-in to save time\",\"complete_online_checkin_email_body\":\"Hi, I wanted to share with you the page to complete the Online check-in for our reservation at {{housingName}}, this will save us time upon our arrival. I already completed my information, is very simple, just visit this link: {{link}}\",\"identity_verification_pending_text\":\"There are some pending guests that couldn't be identified with the photos provided. Click on the button next to the name to retry the process or share the link to the pending person.\",\"complete_identity_verification_email_subtitle\":\"Complete your identity verification\",\"complete_identity_verification_email_body\":\"Hi,the host requested to retry the identity verification since the process couldn’t be completed with the photos you sent. Here’s the link to retry the process: {{link}}\",\"complete_iden_verif_whatsapp_repeat\":\"Hi, the host requested to retry the identity verification since the process couldn’t be completed with the photos you sent. Here’s the link to retry the process: {{link}}\",\"complete_iden_verif_whatsapp\":\"Hi, I wanted to share with you the page to complete the Online check-in for our reservation at {{housingName}}, this will save us time upon our arrival. I already completed my information, is very simple, just visit this link: {{link}}\",\"add_guest\":\"Add Guest\",\"pending\":\"Pending\",\"deals_and_experiences\":\"Deals and Experiences\",\"all\":\"All\",\"early_check_in_late_check_out\":\"Check-in/Check-out\",\"transportation\":\"Transportation\",\"skip_deals\":\"Skip deals\",\"book\":\"Book\",\"tourist_group\":\"Tourist group\",\"request_this_deal\":\"Request this deal\",\"price\":\"Price\",\"deal_terms_and_conditions\":\"This deal is subject to <2>Terms & Conditions</2>\",\"all_day\":\"All day\",\"monday\":\"Monday\",\"tuesday\":\"Tuesday\",\"wednesday\":\"Wednesday\",\"thursday\":\"Thursday\",\"friday\":\"Friday\",\"saturday\":\"Saturday\",\"sunday\":\"Sunday\",\"everyday\":\"Everyday\",\"not_available\":\"Not available\",\"availability\":\"Availability\",\"view_map\":\"View map\",\"address\":\"Address\",\"people\":\"People\",\"enter_date_and_time\":\"Enter Date and Time\",\"date\":\"Date\",\"time\":\"Time\",\"quantity\":\"Quantity\",\"book_and_keep_exploring\":\"Book and Keep Exploring\",\"add_your_email_title\":\"Add your email\",\"add_your_email_text\":\"We need your email to keep you informed about your deal status and provide a contact to the host.\",\"your_email\":\"Your email\",\"signature_title\":\"signature\",\"repeat_signature\":\"Repeat signature\",\"selected\":\"Selected\",\"requested\":\"Requested\",\"whos_purchasing_deal\":\"Who's purchasing the deal?\",\"select_guest_from_list\":\"Select a guest from the list:\",\"select\":\"Select\",\"requested_exclamation\":\"Requested!\",\"offer_requested_text\":\"We will send you an email once your host has accepted/rejected your request.\",\"you_are_first_guest_register\":\"You're the first guest. Please complete your registration to purchase deals.\",\"delete_payment_question\":\"Delete payment?\",\"you_are_going_to_delete_payment\":\"You are going to delete selected payment.\",\"delete\":\"Delete\",\"deals\":\"Deals\",\"identity_verification_title\":\"This reservation requires an identity verification. This will just take a few steps.\",\"take_photo_your_document\":\"Take a photo of your document\",\"select_nationality_and_document_type\":\"Select your nationality and document type\",\"only_identity_verification_success_text\":\"The identity verification has been successfully confirmed!\",\"filter\":\"Filter\",\"incomplete\":\"Incomplete\",\"new\":\"New\",\"complete\":\"Complete\",\"others\":\"Others\",\"experiences\":\"Experiences\",\"add_personal_data_and_sign\":\"Add personal data and Sign\",\"confirm_your_booking_details\":\"Confirm your booking details\",\"verify\":\"Verify\",\"details\":\"Details\",\"summary\":\"Summary\",\"protect\":\"Protect\",\"click_here_to_sign\":\"Click here to sign\",\"leaving_time\":\"LEAVING TIME\",\"age_above\":\"Age above\",\"under\":\"Under\",\"by_clicking_next_you_accept_the\":\"By clicking ‘Next’ you accept the\",\"by_clicking_signt_now_you_accept_the\":\"By clicking <1>‘Sign now’</1> you accept to sign the form with your name, the short term \",\"contract\":\"Contract\",\"and_you_accept_our\":\"and you accept our\",\"skip_tourist_taxes_title\":\"Skip tourist taxes calculation?\",\"tourist_taxes_warning_modal_description\":\"By law the payment of the tourist taxes are required for any reservation, if you skip the process, you’ll have to pay it at your arrival.\",\"new_guest\":\"New guest\",\"and_avoid_the_tedious_waiting_time\":\"And avoid the tedious waiting time\",\"let_s_check_in\":\"Let’s<br> check-in!\",\"welcome_to\":\"Welcome to\",\"welcome\":\"Welcome\",\"confirm_details\":\"Confirm details\",\"dates\":\"Dates\",\"guests\":\"Guests\",\"guests_count\":\"Guests\",\"check_in_now\":\"Check-in Now\",\"your_booking\":\"Your booking\",\"pay_deposit\":\"Pay Deposit\",\"learn_more_security_deposit_description\":\"<0>How does it work?</0><1><0>Pay the deposit amount with a credit or debit card. The payment is really a pre-authorization for your bank to temporary block the amount but it won't charge it.</0><0>Every 7 days the pre-authorization is released back to your account and automatically renewed up to 30 days or 7 days after the check-out date, whichever comes first. Depending on the length of your reservation you might get a couple of notifications from your bank with the pre-authorization renewal notice.</0><0>After the 7 days of last pre-authorization, the amount will be completely released and available in your bank account.</0></1><br/><0>What if damage occurs?</0><1><0>Your host has up to 7 days after the check-out date of your reservation to review for damage.</0><0>During that period if the accommodation terms were broken or the property assets were damaged, your host could charge the deposit amount as a penalty. If 7 days have passed after the check-out, your host won't be able to charge the amount anymore.</0></1>\",\"property_protection\":\"Property Protection\",\"error_continue_without_taxes\":\"Please add the ages of the guests to continue with the taxes calculations.\",\"confirm_identity_documents_description\":\"We will confirm your identity using biometric technology that uses images of you and your identification, and other data sources.\",\"confirm_identity_documents_document_only_description\":\"Take or upload photo of your travel document in order to verify your identity before your arrival. The photo of the document should be the same that you will use to complete the check-in registration.\",\"select_nationality\":\"Select your nationality\",\"type_verify_selector_title\":\"Select how to verify your identity\",\"identity_type_selector_title\":\"Select identification type\",\"dont_verify_my_identity\":\"Don't Verify My Identity\",\"could_not_detect_mrz\":\"Could not detect the MRZ.\",\"try_again_mrz_or_contact\":\"Please take a picture of the side of the document where the MRZ is. If the error persists, contact our support team.\",\"mrz_check_id_is_missing\":\"MRZ Check ID is missing.\",\"front\":\"Front\",\"selfie\":\"Selfie\",\"first_we_take_front_photo\":\"First we’ll take a photo of the front of your photo ID\",\"now_we_take_back_photo\":\"Now, flip the ID over to take a photo of the backside\",\"fit_your_face_in_oval\":\"Fit your face inside the oval shape\",\"fit_your_face_inside_the_camera\":\"Fit your face inside the camera, make sure to remove glasses, headphones and other accessories.\",\"register_another_guest_lowwer_case\":\"Register Another Guest\",\"guest_registered\":\"Guest registered!\",\"guest_registered_modal_description\":\"<0>{{name}}</0> has been successfully registered. Would you like to go to the next step or to register more guests right now?\",\"no_guests\":\"No guests\",\"sign_up\":\"Sign Up\",\"skip_sign_up\":\"Skip Sign Up\",\"next_time_you_will_checkin\":\"Next time you’ll do the check-in in less than 1 minute\",\"sign_up_with_google\":\"Sign up with Google\",\"or_continue_with_email\":\"Or continue with email\",\"enter_your_email\":\"Enter your email\",\"password\":\"Password\",\"already_have_an_account\":\"Already have an account?\",\"login\":\"Login\",\"forgot_password\":\"Forgot password?\",\"register_now\":\"Register Now\",\"dont_have_an_account\":\"Don’t have an account?\",\"card_holder\":\"Card Holder\",\"all_guests_registered\":\"All guests registered\",\"count_guests_registered\":\"{{count}} pending guests\",\"home\":\"Home\",\"account\":\"Account\",\"return_to_home\":\"Return to Home\",\"congratulations\":\"Congratulations!\",\"go_to_payment\":\"Go to payment\",\"stay\":\"Stay\",\"update_all\":\"Update all\",\"next_guest\":\"Next guest\",\"invoicing_details\":\"Invoicing Details\",\"invoicing_address\":\"Invoicing address\",\"make_your_experience_unforgettable\":\"Make your Experience unforgettable\",\"explore_all_experiences\":\"Explore All Experiences\",\"maybe_later\":\"Maybe later\",\"find_and_book_your_adventure\":\"Find and book your adventure\",\"request_experience\":\"Request Experience\",\"delete_this_guest\":\"Delete this guest?\",\"delete_this_guest_description\":\"Are you sure you want to delete this guest? This action cannot be undone.\",\"drag_and_drop_your_photo_here\":\"Drag and drop your photo here\",\"or_click_to_browse\":\"or click to browse\",\"commercial_name_uppercase\":\"COMMERCIAL NAME\",\"id_type_uppercase\":\"ID TYPE\",\"fiscal_code_uppercase\":\"FISCAL CODE\",\"street_uppercase\":\"STREET\",\"city_uppercase\":\"CITY\",\"province_uppercase\":\"PROVINCE\",\"postal_code\":\"Postal code\",\"contract_preview\":\"Contract Preview\",\"download\":\"Download\",\"early_checkin\":\"Early check-in\",\"description\":\"Description\",\"total_price\":\"Total price\",\"select_time\":\"Select time\",\"select_date\":\"Select date\",\"to\":\"To\",\"from\":\"From\",\"off_uppercase\":\"OFF\",\"view_details\":\"View Details\",\"hours\":\"hours\",\"total_lowercase\":\"total\",\"starting_from\":\"Starting from\",\"no_data\":\"no data\",\"loading_your\":\"Loading your…\",\"reservation_data\":\"Reservation Data\",\"form_data_is_missing\":\"Form data is missing\",\"select_sex\":\"Select sex\",\"are_you_done\":\"Are you done?\",\"booked_exclamation\":\"Booked!\",\"keep_exploring\":\"Keep exploring\",\"booked_uppercase\":\"BOOKED\",\"unit_lowercase\":\"unit\",\"person_lowercase\":\"person\",\"day_lowercase\":\"day\",\"group_lowercase\":\"group\",\"romantic\":\"Romantic\",\"health_and_spa\":\"Health & Spa\",\"art_and_culture\":\"Art & Culture\",\"services\":\"Services\",\"f_and_b\":\"F&B\",\"seasonal\":\"Seasonal\",\"contract_not_available\":\"Contract not Available\",\"contract_not_available_description\":\"The contract sample is not available at the moment, please try again later or contact your host to get a sample.\",\"under_number\":\"Under {{number}}\",\"children\":\"Children\",\"connection_issue\":\"Connection issue\",\"connection_issue_description\":\"The door couldn't be opened at the moment, please go back to the link and try again.<1/><1/>If the error persist please contact your host for further instructions.\",\"virtual_keys_not_available_title\":\"Virtual keys outside the booking period\",\"virtual_keys_not_available_description\":\"The link for the virtual keys can only be used <2>within the date range of your booking.</2><3/><3/>Please contact your host for further instructions.\",\"door_opened_exclamation\":\"Door opened!\",\"virtual_keys_success_description\":\"The {{doorName}} door has been successfully opened. Please be careful and make sure the door is locked.\",\"you_have_two_ways\":\"You have two ways\",\"accept_superhog_data_verification\":\"I accept\",\"accept_superhog_data_verification_title\":\"Superhog data verification\",\"superhog_info_tooltip\":\"This property includes damage protection service by Superhog, we need to send your data to Superhog for a verification to check if you are eligible for the damage protection guarantee. For more information, please contact your host.\",\"accept_superhog_terms\":\"Please accept the Superhog agreement\",\"accept_superhog_terms_description\":\" In order to continue you must accept the <0>Superhog data verification agreement</0>.\",\"discard_changes_question\":\"Discard changes?\",\"discard_changes_question_subtitle\":\"There are some unsaved changes, would you like to discard the changes?\",\"warning_close_taxes_modal_title\":\"Discard calculation changes?\",\"warning_close_taxes_modal_description\":\"You have made some changes on the tourist taxes calculation, do you want to save the changes or discard them?\",\"save\":\"Save\",\"take_picture_with_your_webcam\":\"Take a picture with your webcam\",\"upload_file\":\"Upload a file\",\"retake\":\"Retake\",\"unpaid\":\"Unpaid\",\"discard\":\"Discard\",\"no_photo\":\"No photo\",\"only_doc_file_types\":\"Solo archivos JPEG, JPG o PNG\",\"deleted\":\"Deleted\",\"delete_guest_question\":\"Delete guest?\",\"delete_guest_description\":\"Are you sure you want to delete this guest? All data will be deleted and this action can´t be undone.\",\"yes_delete\":\"Yes, delete\",\"welcome_to_housing_name\":\"Welcome to {{housingName}}\",\"welcome_to_housing_name_subtitle\":\"To start the online check-in provide one of the following data:\",\"booking_reference\":\"Booking reference\",\"enter_reference_code\":\"Enter reference code\",\"lead_guest_email_tooltip\":\"The email address used when booking the reservation\",\"find_booking\":\"Find booking\",\"find_my_booking_via\":\"Find my booking via\",\"checkin_date_and_email\":\"Check-in date and Email\",\"provide_more_details\":\"Provide more details\",\"provide_more_details_description\":\"Please provide additional details about your reservation to start the online check-in process.\",\"reservation_details\":\"Reservation details\",\"guest_to_register\":\" Number of guests in the reservation\",\"enter_number_of_guests\":\"Enter number of guests\",\"go_back\":\"Go back\",\"minimum_check_in_date_is\":\"Minimum check-in date is {{date}}\",\"lets_find_your_booking\":\"Let’s find your booking\",\"remove_guest\":\"Remove guest\",\"max_file_size_is_number_mb\":\"Max file size is {{number}}MB\",\"incorrect_file_type_only_pdf_and_file_types_allowed\":\"Incorrect file type. Only JPEG, JPG, PNG or PDF files are allowed\",\"incorrect_file_type_only_file_types_allowed\":\"Incorrect file type. Only JPEG, JPG or PNG files are allowed\",\"number_of_people\":\"Number of people\",\"number_of_groups\":\"Number of groups\",\"number_of_days\":\"Number of days\",\"could_not_detect_your_face\":\"Could not detect your face.\",\"incorrect_file_type_only_jpeg_or_jpg_allowed\":\"Incorrect file type. Only JPEG or JPG files are allowed.\",\"photos_missing_for_identity_verification_error\":\"Document photo or selfie is missing. Please take all photos to proceed.\",\"document_photo_missing_for_identity_verification_error\":\"Document photo is missing. Please take a photo of the document and then a selfie to proceed with the verification\",\"accept_superhog_data_verification_title_guest\":\"the Guest Agreement\",\"terms_and_conditions_link_guest\":\"https://superhog.com/superhog-guest-agreement/\",\"sh_and\":\" and \",\"guest_cannot_be_deleted\":\"Guest cannot be deleted\",\"guest_cannot_be_deleted_description\":\"This is the lead guest and according to the local authorities the lead guest requires to complete more data than the rest of the guests so it cannot be deleted at this moment. <br/><br/> If you want to delete the lead guest data, please delete the other guest first.\",\"guest_list\":\"Guest List\",\"not_registered_guest_yet\":\"There are not registered guests yet\",\"register_new_guest\":\"Regiester new guest\",\"do_you_want_the_pending_guest_to_register_themselves\":\"Do you want the pending guest to register themselves?\",\"share_registrarion_link\":\"Share registrarion link\",\"or_there_are_no_more_guest_to_register\":\"Or there are no more guest to register?\",\"all_guests_are_registered\":\"All guests are registered\",\"booking_details\":\"Booking Details\",\"arrival_time_capitalize\":\"Arrival Time\",\"leaving_tme_capitalize\":\"Leaving Time\",\"adult\":\"Adult\",\"we_will_confirm_your_identity_biometric\":\"We will confirm your identity using biometric technology that uses images of you and your identification, and other data sources\",\"select_identification_type\":\"Now, Select identification type\",\"enter_your_nationality\":\"Enter your nationality\",\"write_or_select_nationality\":\"Write or select nationality\",\"start_verification\":\"Start Verification\",\"select_verification_type\":\"Select how you’d like to verify your identity\",\"add_personal_data_form\":\"Add Personal data and Sign\",\"birth_place_country\":\"Birth place country\"}");
+module.exports = JSON.parse("{\"documents\":{\"passport\":\"Passport\",\"identity_card\":\"Identity Card\",\"driving_license\":\"Driving License\",\"driving_licence\":\"Driving License\",\"drivers_license\":\"Drivers license\",\"other\":\"Other\",\"foreign_document\":\"Foreign Document\",\"residence_permit\":\"Residence Permit\",\"foreigner_id\":\"Foreigner ID\",\"diplomatic_id\":\"Diplomatic ID\",\"driving_licence_cz\":\"Driving Licence\",\"driving_licence_gr\":\"Driving Licence\",\"army_id_gr\":\"Army ID\",\"work_permit_gr\":\"Work permit\",\"identity_card_paper\":\"Italian Identity Card (Paper)\",\"driving_licence_eu\":\"Driving Licence\",\"diplomatic_passport\":\"Diplomatic passport\",\"service_passport\":\"Service passport\",\"identity_certificate\":\"Certificate of Identity\",\"identity_diplomatic\":\"Diplomatic ID\",\"other_document\":\"Other Document\",\"border_pass\":\"Border pass\",\"children_citizens_slovenian\":\"Children, citizens of the Republic of Slovenia, without a document\",\"travel_documents\":\"Travel documents under an international agreement\",\"administrative_documents\":\"Administrative documents\",\"weapon_certificate\":\"Weapon certificate\",\"dni\":\"DNI\",\"driving_licence_es\":\"Driving License (ES)\",\"spanish_residence_permit\":\"Spanish Residence Permit (NIE)\",\"eu_residence_permit\":\"EU Residence Permit\",\"driving_licence_gb\":\"Driving Licence\",\"tess__app_to_ag_custodia\":\"TESS. APP.TO AG.CUSTODIA\",\"tess__sott_li_ag_custodia\":\"TESS. SOTT.LI AG.CUSTODIA\",\"tess__uff_li_ag_custodia\":\"TESS. UFF.LI AG.CUSTODIA\",\"tess__militare_truppa_a_m\":\"TESS. MILITARE TRUPPA A.M\",\"tess__sottufficiali_a_m_\":\"TESS. SOTTUFFICIALI A.M.\",\"tess__ufficiali_a_m_\":\"TESS. UFFICIALI A.M.\",\"tess__app_to_carabinieri\":\"TESS. APP.TO CARABINIERI\",\"tess__sottufficiali_cc\":\"TESS. SOTTUFFICIALI CC\",\"tess__ufficiale\":\"TESS. UFFICIALE\",\"tess__ag__e_ag_sc__c_f_s_\":\"TESS. AG. E AG.SC. C.F.S.\",\"tess__sottuficiali_c_f_s_\":\"TESS. SOTTUFICIALI C.F.S.\",\"tess__ufficiali_c_f_s_\":\"TESS. UFFICIALI C.F.S.\",\"tess__s_i_s_d_e_\":\"TESS. S.I.S.D.E.\",\"tess__militare_e_i_\":\"TESS. MILITARE E.I.\",\"tess__sottufficiali_e_i_\":\"TESS. SOTTUFFICIALI E.I.\",\"tess__ufficiali_e_i_\":\"TESS. UFFICIALI E.I.\",\"tess__app_to_finanziere\":\"TESS. APP.TO FINANZIERE\",\"tess__sott_li_g_d_f_\":\"TESS. SOTT.LI G.D.F.\",\"tess__pol__trib__g_d_f_\":\"TESS. POL. TRIB. G.D.F.\",\"tess__ufficiali_g_d_f_\":\"TESS. UFFICIALI G.D.F.\",\"tess__pers__magistrati\":\"TESS. PERS. MAGISTRATI\",\"tess__milit__m_m_\":\"TESS. MILIT. M.M.\",\"tess__sottuficiali_m_m_\":\"TESS. SOTTUFICIALI M.M.\",\"tess__ufficiali_m_m_\":\"TESS. UFFICIALI M.M.\",\"tess__parlamentari\":\"TESS. PARLAMENTARI\",\"patente_nautica\":\"PATENTE NAUTICA\",\"porto_fucile_uso_caccia\":\"PORTO FUCILE USO CACCIA\",\"porto_fucile_dif__person_\":\"PORTO FUCILE DIF. PERSON.\",\"porto_darmi_uso_sportivo\":\"PORTO D'ARMI USO SPORTIVO\",\"porto_pistola_dif__person\":\"PORTO PISTOLA DIF. PERSON\",\"porto_darmi_guardie_giur\":\"PORTO D'ARMI GUARDIE GIUR\",\"tess__ispettori_p_p_\":\"TESS. ISPETTORI P.P.\",\"tess__sovrintendenti_p_p_\":\"TESS. SOVRINTENDENTI P.P.\",\"tess__ufficiali_p_p_\":\"TESS. UFFICIALI P.P.\",\"tess__polizia_femminile\":\"TESS. POLIZIA FEMMINILE\",\"tess__funzionari_p_s_\":\"TESS. FUNZIONARI P.S.\",\"tess__ispettori_p_s_\":\"TESS. ISPETTORI P.S.\",\"tess__sovrintendenti_p_s_\":\"TESS. SOVRINTENDENTI P.S.\",\"tess__ufficiali_p_s_\":\"TESS. UFFICIALI P.S.\",\"titolo_viaggio_rif_polit_\":\"TITOLO VIAGGIO RIF.POLIT.\",\"tess__milit__truppa_sismi\":\"TESS. MILIT. TRUPPA SISMI\",\"tess__sottufficiali_sismi\":\"TESS. SOTTUFFICIALI SISMI\",\"tess__ufficiali_sismi\":\"TESS. UFFICIALI SISMI\",\"tess__iscriz__albo_odont_\":\"TESS. ISCRIZ. ALBO ODONT.\",\"tes__unico_per_la_camera\":\"TES. UNICO PER LA CAMERA\",\"tess__corte_dei_conti\":\"TESS. CORTE DEI CONTI\",\"tes__doganale_ril_min_fin_\":\"TES. DOGANALE RIL.MIN.FIN.\",\"tess__ferrov__senato\":\"TESS. FERROV. SENATO\",\"tess__min_pubb_istruzione\":\"TESS. MIN.PUBB.ISTRUZIONE\",\"tess__militare_nato\":\"TESS. MILITARE NATO\",\"tes__ente_naz__assis_volo\":\"TES. ENTE NAZ. ASSIS.VOLO\",\"tess__min_polit_agric_for_\":\"TESS. MIN.POLIT.AGRIC.FOR.\",\"tess__min__affari_esteri\":\"TESS. MIN. AFFARI ESTERI\",\"tess__iscr_albo_architetti\":\"TESS. ISCR.ALBO ARCHITETTI\",\"tessera_iscr__albo_avvoc_\":\"TESSERA ISCR. ALBO AVVOC.\",\"tess__corte_dappello\":\"TESS. CORTE D'APPELLO\",\"tess__consiglio_di_stato\":\"TESS. CONSIGLIO DI STATO\",\"tessera_riconosc__d_i_a_\":\"TESSERA RICONOSC. D.I.A.\",\"tess__membro_equip__aereo\":\"TESS. MEMBRO EQUIP. AEREO\",\"tess__iscr__albo_ingegneri\":\"TESS. ISCR. ALBO INGEGNERI\",\"tess__ministero_lavori_pu\":\"TESS. MINISTERO LAVORI PU\",\"tess__min_ben_e_att_cult_\":\"TESS. MIN.BEN.E ATT.CULT.\",\"tess__ministero_difesa\":\"TESS. MINISTERO DIFESA\",\"tess__ministero_finanze\":\"TESS. MINISTERO FINANZE\",\"tess__ministero_giustizia\":\"TESS. MINISTERO GIUSTIZIA\",\"tess__ministero_interno\":\"TESS. MINISTERO INTERNO\",\"tess__ministero_sanita\":\"TESS. MINISTERO SANITA'\",\"tess__ministero_tesoro\":\"TESS. MINISTERO TESORO\",\"tessera_dellordine_notai\":\"TESSERA DELL'ORDINE NOTAI\",\"tess__ordine_giornalisti\":\"TESS. ORDINE GIORNALISTI\",\"tess__pres_za_cons__min_\":\"TESS. PRES.ZA CONS. MIN.\",\"tess__pubblica_istruzione\":\"TESS. PUBBLICA ISTRUZIONE\",\"tes__poste_e_telecomunic_\":\"TES. POSTE E TELECOMUNIC.\",\"tessera_u_n_u_c_i_\":\"TESSERA U.N.U.C.I.\",\"tess__identif_telecom_it_\":\"TESS. IDENTIF.TELECOM IT.\",\"tes__ferroviaria_deputati\":\"TES. FERROVIARIA DEPUTATI\",\"tes__ferrov__ex_deputati\":\"TES. FERROV. EX DEPUTATI\",\"tess__sott_li_vig__urbani\":\"TESS. SOTT.LI VIG. URBANI\",\"tess__uff_li_vig_urbani\":\"TESS. UFF.LI VIG.URBANI\",\"tess__sottuff_li_vv_ff_\":\"TESS. SOTTUFF.LI VV.FF.\",\"tess__ufficiali_vv_ff_\":\"TESS. UFFICIALI VV.FF.\",\"tess__agenti/ass_ti_p_p_\":\"TESS. AGENTI/ASS.TI P.P.\",\"tess__agenti/ass_ti_p_s_\":\"TESS. AGENTI/ASS.TI P.S.\",\"tess__iscr__albo_med/chi_\":\"TESS. ISCR. ALBO MED/CHI.\",\"tess__app_to/vig__vv_ff_\":\"TESS. APP.TO/VIG. VV.FF.\",\"tess__app_to/vig__urbano\":\"TESS. APP.TO/VIG. URBANO\",\"tess__minist__trasp/navig\":\"TESS. MINIST. TRASP/NAVIG\"},\"english\":\"English\",\"spanish\":\"Spanish\",\"italian\":\"Italian\",\"french\":\"French\",\"hungarian\":\"Hungarian\",\"russian\":\"Russian\",\"german\":\"German\",\"czech_adjective\":\"Czech\",\"online_checkin\":\"Online Check-in\",\"confirm_booking_details\":\"Confirm Booking Details\",\"check_in_date\":\"Check-in Date\",\"select_nationality_and_document_to_continue\":\"First, select your nationality and the document type to continue.\",\"check_out_date\":\"Check-out Date\",\"adults\":\"Adults\",\"error_sad_face\":\"Error :(\",\"children_under_number\":\"Children (under {{number}})\",\"next\":\"Next\",\"next_step\":\"Next step\",\"oops\":\"Ooops!\",\"reservation_loading_error\":\"We’re having some problems finding your reservation. Please, contact your host and tell him to send the link again\",\"link_expired_loading_error\":\"The link has expired. Please, go back to the email or message and click on the link again. Still expired? Contact you host and tell him to send the link again\",\"required\":\"Required\",\"min_number_is\":\"Minimum number is {{number}}\",\"max_number_is\":\"Maximum number is {{number}}\",\"min_number_is_short\":\"Min number is {{number}}\",\"max_number_is_short\":\"Max number is {{number}}\",\"error\":\"Error\",\"number_of_guests\":\"Number of guests\",\"back_button\":\"Back\",\"back\":\"Back\",\"add_personal_data\":\"Add Personal Data\",\"january\":\"January\",\"february\":\"February\",\"march\":\"March\",\"april\":\"April\",\"may\":\"May\",\"june\":\"June\",\"july\":\"July\",\"august\":\"August\",\"september\":\"September\",\"october\":\"October\",\"november\":\"November\",\"december\":\"December\",\"day\":\"Day\",\"month\":\"Month\",\"year\":\"Year\",\"birth_date\":\"Birth Date\",\"name\":\"Name\",\"enter_name\":\"Enter Name\",\"incomplete_personal_data\":\"Incomplete Personal Data\",\"at_least_one_field_is_missing\":\"At least one field is missing. Missing fields are highlighted in red. Please complete your personal data before continuing.\",\"ok\":\"Ok\",\"male\":\"Male\",\"female\":\"Female\",\"sex\":\"Sex\",\"language\":\"Language\",\"nationality\":\"Nationality\",\"doc_type\":\"Document type\",\"surname\":\"Surname\",\"enter_surname\":\"Enter Surname\",\"second_surname\":\"Second Surname\",\"enter_second_surname\":\"Enter Second Surname\",\"fiscal_code\":\"Fiscal code\",\"invalid_fiscal_code\":\"Invalid fiscal code\",\"doc_number\":\"Document Number\",\"enter_doc_number\":\"Enter Document Number\",\"doc_number_dni_format_error\":\"Incorrect format (it should be 99999999X)\",\"doc_number_nie_format_error\":\"Incorrect format (it should be X9999999X)\",\"date_of_issue\":\"Date of Issue\",\"cant_be_equal_or_greater_than_today\":\"Can't be equal or greater than actual date\",\"cant_contain_number_and_symbols\":\"Can't contain numbers and symbols\",\"cant_be_equal_or_smaller_than_birth_date\":\"Can't be equal or smaller than birth date\",\"cant_be_equal_or_after_than_issue_date\":\"Can’t be equal or after than date of issue\",\"country_of_birth\":\"Country of birth\",\"residence_country\":\"Residence Country\",\"residence_province\":\"Residence province\",\"country_of_issue\":\"Document Expedition Country\",\"city_of_birth\":\"City of Birth\",\"enter_city_of_birth\":\"Enter City of Birth\",\"city_of_issue\":\"Document Expedition City\",\"residence_city\":\"Residence City\",\"enter_residence_city\":\"Enter Residence City\",\"enter_issue_city\":\"Enter Document Expedition City\",\"residence_address\":\"Residence Address\",\"enter_residence_address\":\"Enter Residence Address\",\"next_destination_country\":\"Next Destination Country\",\"next_destination_city\":\"Next Destination City\",\"enter_next_destination_city\":\"Enter Next Destination City\",\"next_destination_address\":\"Next Destination Address\",\"enter_next_destination_address\":\"Enter Next Destination Address\",\"residence_postal_code\":\"Residence Postal Code\",\"enter_residence_postal_code\":\"Enter Residence Postal Code\",\"citizenship\":\"Citizenship\",\"visa_number_eu\":\"Visa Number (non EU Citizens)\",\"enter_visa_number\":\"Enter Visa Number\",\"purpose_of_stay\":\"Purpose of stay\",\"next_destination_district\":\"Next Destination District\",\"next_destination_municipality\":\"Next Destination Municipality\",\"arrived_from_country\":\"Arrived From Country\",\"arrived_from_district\":\"Arrived From District\",\"arrived_from_municipality\":\"Arrived From Municipality\",\"capture\":\"Capture\",\"frontside\":\"FRONTSIDE\",\"where_the_photo_is\":\"Where the photo is\",\"keep_your_doc_inside_the_box\":\"Keep your document inside the box\",\"capture_id\":\"Capture ID\",\"success\":\"Success\",\"where_the_mrz_code_is\":\"Where the <1>MRZ Code</1> is\",\"backside\":\"BACKSIDE\",\"single_page_that_contains_all_the_data\":\"Single page that contains all the data\",\"scan_passport\":\"Scan passport\",\"scan_document\":\"Scan document\",\"hope_you_will_come_back_soon\":\"Hope you will come back soon!\",\"powered_by\":\"Powered by\",\"expired_link_message\":\"The online check-in is no longer available for this reservation.\",\"signature_placeholder_text\":\"Tap to Sign here\",\"repeat\":\"Repeat\",\"sign\":\"Sign\",\"signature_screen_top_text\":\"Now, please add your signature.\",\"clear\":\"Clear\",\"terms_and_conditions_link\":\"https://chekin.com/en/generic-privacy-policy-of-accommodations/\",\"terms_and_conditions_link_super_hog\":\"https://superhog.com/privacy-policydata-protection-policy/\",\"i_accept\":\"I accept\",\"terms_and_conditions\":\"Privacy Policy\",\"contract_checkbox_label\":\"I read and accept the contract.\",\"loading_contract\":\"Loading contract...\",\"contract_loading_error\":\"Contract loading error\",\"try_again\":\"Try again\",\"you_have_to_sign\":\"You have to sign before continuing.\",\"log_out\":\"Log out\",\"please_sign_and_accept_terms_and_contract\":\"Please sign inside the box. You can use your finger or mouse. Don’t forget to <1>accept the contract and the Terms and Conditions.</1>\",\"please_sign_and_accept_terms\":\"Please sign inside the box. You can use your finger or mouse. Don’t forget to accept <1>Terms and Conditions.</1>\",\"sign_now\":\"Sign now\",\"authorities_mark_mandatory_to_accept\":\"In order to continue  with the registration you must accept the <1>Privacy Policy</1>.\",\"authorities_mark_mandatory_to_accept_contract\":\"In order to continue with the registration you must accept the <1>contract</1> and the <1>Privacy Policy</1>.\",\"please_accept_terms_and_conditions\":\"Please, accept the Privacy Policy\",\"accept_terms_and_conditions\":\"ACCEPT POLICY\",\"view_contract\":\"View Contract\",\"successfully_completed\":\"Successfully Completed!\",\"share_checkin_link\":\"Share check-in link\",\"register_another_guest\":\"REGISTER ANOTHER GUEST\",\"checkin_status\":\"Check-in Status\",\"registered\":\"registered\",\"collapse\":\"Collapse\",\"more_guest\":\"MORE GUEST\",\"share_online_checkin\":\"Share Online Check-In\",\"copied\":\"Copied!\",\"copy_link\":\"COPY LINK\",\"copy_link_lowwer\":\"Copy Link\",\"or_share_by\":\"Or share by:\",\"please_accept_contract_and_terms_and_conditions\":\"Please, accept the Privacy Policy and Contract\",\"accept\":\"ACCEPT POLICY & CONTRACT\",\"sending_your_data\":\"Completing your registration...\",\"it_could_take_seconds\":\"It could take a couple of seconds\",\"we_found_error\":\"We have found an error.\",\"try_again_or_contact\":\"Please try again. If the error persists, contact our support team.\",\"to_send_you_key_you_have_to\":\"To send you the virtual key you have to complete 2 simple steps\",\"capture_id_passport\":\"Capture your ID/Passport\",\"pay\":\"Pay\",\"paid\":\"Paid!\",\"paid_without_exclamation_mark\":\"Paid\",\"verify_your_identity\":\"Verify your identity\",\"capture_id_or_passport\":\"CAPTURE YOUR ID OR PASSPORT\",\"please_capture_side_with_photo\":\"Please do capture the side that contains your photo\",\"take_a_selfie\":\"Take a selfie\",\"take_a_selfie_tips\":\"Now take a selfie and we will compare both photos. Remove anything that could make you look different (like glasses, hats…)\",\"keep_your_face_inside_the_blue_square\":\"Keep your face inside the blue square\",\"success_exclamation\":\"Success!\",\"identity_verification_success_title\":\"Success!\",\"identity_verification_success_text\":\"When all the guests of the reservation have completed the online check-in, you will receive an email with the virtual key and the entry instructions.\",\"scanning\":\"Scanning...\",\"cancel\":\"Cancel\",\"error_again\":\"Error again\",\"sadly_error_persists\":\"Sadly, the error persists.\",\"you_are_registered_but_we_cannot_send_key\":\"You are already registered but we cannot send you the virtual key because the biometric match has failed twice.\",\"please_contact_support_team\":\"Please contact our support team.\",\"finish\":\"Finish\",\"comparing\":\"Comparing...\",\"we_are_comparing_doc_and_selfie\":\"We are comparing your photo from your document with your selfie.\",\"detecting\":\"Detecting...\",\"we_are_detecting_your_face\":\"We are detecting your face.\",\"matching\":\"Matching\",\"try_again_please\":\"Try again please.\",\"passport_photo\":\"Passport\\n photo\",\"selfie_photo\":\"Selfie\\n photo\",\"no_options\":\"No options\",\"start_typing\":\"Start typing...\",\"optional\":\"Optional\",\"tax_exemption\":\"Tax exemption\",\"exemption\":\"Exemption\",\"tax_id\":\"Tax ID\",\"matching_error\":\"Matching Error\",\"identity_verification_error_text\":\"Make sure to take a picture of the document first and then a selfie\",\"the_docs_you_can_use_depend_on_nat\":\"The docs you can use depend on your nationality:\",\"it_depends_on_your_nationality\":\"It depeneds on your nationality:\",\"europeans\":\"Europeans\",\"nationality_identity_document\":\"National Identity Document, Passport, Residence Permit, Driving License\",\"non_europeans\":\"Non-Europeans\",\"what_document_type\":\"What documents should I use?\",\"foreign_document\":\"Foreign document\",\"foreigner_id\":\"Foreigner ID\",\"diplomatic_id\":\"Diplomatic ID\",\"colombians\":\"Colombians\",\"p_id_documents\":\"Passport, Colombian ID\",\"non_colombians\":\"Non-Colombians\",\"p_residence_permit_did_foreign_documents\":\"Passport, Residence Permit, Diplomatic ID, Foreign Document\",\"austria\":\"Austria\",\"belgium\":\"Belgium\",\"colombia\":\"Colombia\",\"czech\":\"Czech Republic\",\"france\":\"France\",\"germany\":\"Germany\",\"italy\":\"Italy\",\"netherlands\":\"Netherlands\",\"portugal\":\"Portugal\",\"spain\":\"Spain\",\"thailand\":\"Thailand\",\"non-thailand\":\"Non-Thailand\",\"uae\":\"United Arab Emirates\",\"non-uae\":\"Non-United Arab Emirates\",\"uk\":\"United Kingdom\",\"passport_id\":\"Passport, ID\",\"passport_id_other\":\"Passport, ID, Other\",\"passport_other\":\"Passport, Other\",\"passport_id_dr_lic\":\"Passport, ID, Driving License\",\"passport_id_dip_p\":\"ID, Passport, Diplomatic Passport\",\"id_cert_doc_p_dr_lic_serv_p\":\"ID, Certificate Document, Passport, Driving Licence, Service Passport\",\"p_srp_eurp\":\"Passport, Spanish Residence Permit, EU Residence Permit\",\"residence_permit\":\"Residence permit\",\"passport\":\"Passport\",\"scan_id_passport\":\"Scan ID / Passport\",\"you_have_two_ways_to_add_data\":\"You have <1>two ways</1> to add your personal data as it is required by law.\",\"add_data_manually\":\"Add data manually\",\"or\":\"Or\",\"could_not_detect\":\"Could not detect.\",\"scan_where_mrz_code_is\":\"Scan your ID or passport by the side where the <1>MRZ code</1> is.\",\"please_review_your_data\":\"Please review your data.\",\"be_sure_that_data_correct\":\"Please be sure that all your data has been entered correctly before going through the next step.\",\"review_data\":\"REVIEW DATA\",\"saving\":\"Saving\",\"phone\":\"Phone\",\"email\":\"Email\",\"invalid_email\":\"Invalid email\",\"enter_your_phone_number\":\"Enter your phone\",\"phone_number\":\"Phone number\",\"search\":\"Search\",\"learn_more\":\"Learn More\",\"no_results\":\"No results found\",\"date_when_the_doc_created\":\"Date when the document was created. (It is <1>not</1> the expiration date)\",\"block_deposit_amount\":\"According to the deposit policy, we will block the listed deposit amount from a credit card. The deposit <1>will be returned</1> after the end of your stay if no damage occurs.\",\"only_basic_letters_are_allowed\":\"Only basic letters and numbers characters are allowed\",\"doc_number_dni_letter_error\":\"Wrong DNI Letter (check the DNI number)\",\"doc_number_dl_letter_error\":\"Wrong DL Letter (check the DL number)\",\"doc_number_nie_letter_error\":\"Wrong NIE Letter (check the NIE number)\",\"scanner_cannot_detect_try_to_add_manually\":\"The scanner cannot detect your document correctly, please try to add your information manually.\",\"compatibility_error\":\"Compatibility Error\",\"please_try_safari\":\"Due to Apple restrictions, the camera doesn’t work in other browsers like Chrome, only works in Safari. Open the page in Safari for a better experience.\",\"please_try_a_different_browser\":\"Your camera doesn't work in this browser. Please, try to open the link in a different browser.\",\"max_length\":\"Cannot exceed {{length}} characters\",\"incorrect_length\":\"Incorrect length\",\"error_boundary_title\":\"We are investigating the error\",\"error_boundary_message\":\"We have smart people investigating what is wrong and we will get a solution very soon. Please come back in a couple of minutes or refresh the page.\",\"describe_what_happened\":\"What happened? Please describe in details what you were doing before the error\",\"security_deposit\":\"Security Deposit\",\"would_you_like_to_make_deposit\":\"Would you like to make your deposit now?\",\"you_can_make_deposit_before_arriving\":\"You can make the deposit before arriving.\",\"deposit_amount\":\"Deposit amount\",\"i_accept_deposit_rules\":\"By clicking in accept I do consent to retain the deposit amount from my credit card.\",\"the_amount_will_be_released_on_date\":\"The amount will be released on {{date}}\",\"make_your_deposit_now\":\"MAKE YOUR DEPOSIT NOW\",\"it_is_mandatory_to_deposit\":\"It is mandatory to block the deposit amount to complete the registration. Don't worry, the amount will be just temporary blocked, we are not going to charge you.\",\"do_it_at_accommodation\":\"Do it at the accommodation\",\"your_deposit_has_been_made\":\"Your security deposit has been successfully paid. The amount will be automatically released when your reservation ends.\",\"taxes\":\"Taxes\",\"proceed_to_payment\":\"Proceed to payment\",\"pay_at_the_accommodation\":\"Pay at the accommodation\",\"payment\":\"Payment\",\"you_have_to_pay\":\"You have to pay\",\"amount_will_be_blocked_from_card\":\"<0>{{amount}}{{currency_sign}}</0> will be blocked from your credit card\",\"pay_now\":\"Pay now\",\"pay_later\":\"Pay later\",\"credit_card\":\"Credit card\",\"download_deposit_terms\":\"Download deposit terms\",\"download_invoice\":\"Download invoice\",\"damage_protection\":\"Damage protection\",\"confirm_and_pay\":\"Confirm and Pay\",\"payment_card_details\":\"Payment card details\",\"payment_method\":\"Payment method\",\"price_details\":\"Price details\",\"save_details\":\"Save details\",\"cardholder_name\":\"Full Name (as it is on the payment card)\",\"cardholder_name_short\":\"CARD HOLDER\",\"age\":\"Age\",\"enter_age\":\"Enter age\",\"tourist_taxes_are_mandatory_in_countries\":\"Touristic taxes are mandatory in some territories\",\"depending_on_country_you_pay_taxes\":\"Depending on the country or region, you may be subject to pay taxes.\",\"taxes_may_vary\":\"Taxes may vary also depending on the place, age of the guests, days of stay…\",\"you_have_to_pay_taxes\":\"By law, you have to pay tourist taxes in this region\",\"total_taxes\":\"Total taxes\",\"exceptions\":\"Exceptions\",\"none\":\"None\",\"you_payment_has_been_made\":\"Your payment has been made\",\"you_payment_has_been_made_successfully\":\"Your payment has been made successfully\",\"payment_creds_already_added\":\"Your card details are already added.\",\"calced_price_is_incorrect\":\"We have troubles calculating your correct price.\",\"calced_price_not_found\":\"We have troubles calculating your price.\",\"loading\":\"Loading\",\"card_number\":\"Card number\",\"expiry_date\":\"Expiry date\",\"continue\":\"Continue\",\"missing_payment_secure_link\":\"Payment 3D Secure link is missing\",\"camera_permissions_denied\":\"The camera doesn't open? Make sure to <2>allow the browser permission</2> to use the camera.\",\"guest\":\"Guest\",\"attach_document\":\"Attach document\",\"onboarding_setup\":\"Onboarding setup\",\"onboarding\":\"Onboarding\",\"payments\":\"Payments\",\"skip\":\"Skip\",\"submit\":\"Submit\",\"identification_error\":\"Identification error\",\"it_is_mandatory_to_pay_for_your_booking\":\"It is mandatory to pay for your booking before completing the registration.\",\"safe_and_secure_payment\":\"100% Safe and Secure Payment\",\"deposit_policy\":\"Deposit Policy\",\"booking\":\"Booking\",\"tourist_taxes\":\"Tourist Taxes\",\"taxes_amount\":\"Taxes Amount\",\"extra_services\":\"Extra Services\",\"total\":\"Total\",\"total_payment\":\"Total payment\",\"completed_exclamation\":\"Completed!\",\"your_checkin_has_been_completed\":\"Your check-in has been completed successfully.\",\"subtotal\":\"Subtotal\",\"transaction_fee\":\"Transaction fee\",\"payment_successful\":\"Payment successful\",\"check_in_check_out\":\"Check-in → Check-out\",\"enter_email\":\"Enter email\",\"lead_guest_name\":\"Lead guest name\",\"lead_guest_email\":\"Lead guest email\",\"enter_number\":\"Enter number\",\"type_of_registration\":\"Type of registration\",\"select_your_type_of_registration\":\"Select your type of registration\",\"single\":\"Single\",\"group\":\"Group\",\"family\":\"Family\",\"creating\":\"Creating\",\"confirm\":\"Confirm\",\"searching\":\"Searching\",\"identetify_verification_error_can_proceed\":\"We couldn't verify your identity but you can continue to complete the registration. Your host might have to verify the photos manually.\",\"guest_name_registered\":\"<0>{{guestName}}</0> is registered\",\"expand\":\"Expand\",\"dont_have_your_guests_question\":\"Don’t have your guests with you?\",\"share_this_link_to_guests\":\"Share this link so they can complete the online check-in themselves.\",\"ill_finish_later\":\"I'll finish later\",\"register\":\"Register\",\"number_pending_guests\":\"{{number}} pending guests\",\"number_pending_guest\":\"{{number}} pending guest\",\"guest_name\":\"Guest Name\",\"retry\":\"Retry\",\"share_page\":\"Share Page\",\"share_by_email\":\"Share by email\",\"guests_verified\":\"Guests, verified\",\"share_by_whatsapp\":\"Share by WhatsApp\",\"identity_verification\":\"Identity Verification\",\"retry_identity_verification_error_text\":\"Your photos don't match but you can continue with your registration. Your host will review them.\",\"verification_pending\":\"Verification Pending\",\"verified\":\"Verified!\",\"your_identity_verified_successfully\":\"Your identity has been verified successfully.\",\"photo_dont_match_but_continue\":\"Your photos don't match but you can continue with your registration. Your host will review them or you can try one more time.\",\"identity_verification_pending\":\"Identity Verification Pending\",\"identity_verification_completed\":\"Identity Verification Completed\",\"identity_verification_completed_text\":\"All guest have been successfully identified. You're all set and read to enjoy your stay!\",\"approved\":\"Approved\",\"complete_online_checkin_email_subject\":\"Complete the Online check-in to save time\",\"complete_online_checkin_email_body\":\"Hi, I wanted to share with you the page to complete the Online check-in for our reservation at {{housingName}}, this will save us time upon our arrival. I already completed my information, is very simple, just visit this link: {{link}}\",\"identity_verification_pending_text\":\"There are some pending guests that couldn't be identified with the photos provided. Click on the button next to the name to retry the process or share the link to the pending person.\",\"complete_identity_verification_email_subtitle\":\"Complete your identity verification\",\"complete_identity_verification_email_body\":\"Hi,the host requested to retry the identity verification since the process couldn’t be completed with the photos you sent. Here’s the link to retry the process: {{link}}\",\"complete_iden_verif_whatsapp_repeat\":\"Hi, the host requested to retry the identity verification since the process couldn’t be completed with the photos you sent. Here’s the link to retry the process: {{link}}\",\"complete_iden_verif_whatsapp\":\"Hi, I wanted to share with you the page to complete the Online check-in for our reservation at {{housingName}}, this will save us time upon our arrival. I already completed my information, is very simple, just visit this link: {{link}}\",\"add_guest\":\"Add Guest\",\"pending\":\"Pending\",\"deals_and_experiences\":\"Deals and Experiences\",\"all\":\"All\",\"early_check_in_late_check_out\":\"Check-in/Check-out\",\"transportation\":\"Transportation\",\"skip_deals\":\"Skip deals\",\"book\":\"Book\",\"tourist_group\":\"Tourist group\",\"request_this_deal\":\"Request this deal\",\"price\":\"Price\",\"deal_terms_and_conditions\":\"This deal is subject to <2>Terms & Conditions</2>\",\"all_day\":\"All day\",\"monday\":\"Monday\",\"tuesday\":\"Tuesday\",\"wednesday\":\"Wednesday\",\"thursday\":\"Thursday\",\"friday\":\"Friday\",\"saturday\":\"Saturday\",\"sunday\":\"Sunday\",\"everyday\":\"Everyday\",\"not_available\":\"Not available\",\"availability\":\"Availability\",\"view_map\":\"View map\",\"address\":\"Address\",\"people\":\"People\",\"enter_date_and_time\":\"Enter Date and Time\",\"date\":\"Date\",\"time\":\"Time\",\"quantity\":\"Quantity\",\"book_and_keep_exploring\":\"Book and Keep Exploring\",\"add_your_email_title\":\"Add your email\",\"add_your_email_text\":\"We need your email to keep you informed about your deal status and provide a contact to the host.\",\"your_email\":\"Your email\",\"signature_title\":\"signature\",\"repeat_signature\":\"Repeat signature\",\"selected\":\"Selected\",\"requested\":\"Requested\",\"whos_purchasing_deal\":\"Who's purchasing the deal?\",\"select_guest_from_list\":\"Select a guest from the list:\",\"select\":\"Select\",\"requested_exclamation\":\"Requested!\",\"offer_requested_text\":\"We will send you an email once your host has accepted/rejected your request.\",\"you_are_first_guest_register\":\"You're the first guest. Please complete your registration to purchase deals.\",\"delete_payment_question\":\"Delete payment?\",\"you_are_going_to_delete_payment\":\"You are going to delete selected payment.\",\"delete\":\"Delete\",\"deals\":\"Deals\",\"identity_verification_title\":\"This reservation requires an identity verification. This will just take a few steps.\",\"take_photo_your_document\":\"Take a photo of your document\",\"select_nationality_and_document_type\":\"Select your nationality and document type\",\"only_identity_verification_success_text\":\"The identity verification has been successfully confirmed!\",\"filter\":\"Filter\",\"incomplete\":\"Incomplete\",\"new\":\"New\",\"complete\":\"Complete\",\"others\":\"Others\",\"experiences\":\"Experiences\",\"add_personal_data_and_sign\":\"Add personal data and Sign\",\"confirm_your_booking_details\":\"Confirm your booking details\",\"verify\":\"Verify\",\"details\":\"Details\",\"summary\":\"Summary\",\"protect\":\"Protect\",\"click_here_to_sign\":\"Click here to sign\",\"leaving_time\":\"LEAVING TIME\",\"age_above\":\"Age above\",\"under\":\"Under\",\"by_clicking_next_you_accept_the\":\"By clicking ‘Next’ you accept the\",\"by_clicking_signt_now_you_accept_the\":\"By clicking <1>‘Sign now’</1> you accept to sign the form with your name, the short term \",\"contract\":\"Contract\",\"and_you_accept_our\":\"and you accept our\",\"skip_tourist_taxes_title\":\"Skip tourist taxes calculation?\",\"tourist_taxes_warning_modal_description\":\"By law the payment of the tourist taxes are required for any reservation, if you skip the process, you’ll have to pay it at your arrival.\",\"new_guest\":\"New guest\",\"and_avoid_the_tedious_waiting_time\":\"And avoid the tedious waiting time\",\"let_s_check_in\":\"Let’s<br> check-in!\",\"welcome_to\":\"Welcome to\",\"welcome\":\"Welcome\",\"confirm_details\":\"Confirm details\",\"dates\":\"Dates\",\"guests\":\"Guests\",\"guests_count\":\"Guests\",\"check_in_now\":\"Check-in Now\",\"your_booking\":\"Your booking\",\"pay_deposit\":\"Pay Deposit\",\"learn_more_security_deposit_description\":\"<0>How does it work?</0><1><0>Pay the deposit amount with a credit or debit card. The payment is really a pre-authorization for your bank to temporary block the amount but it won't charge it.</0><0>Every 7 days the pre-authorization is released back to your account and automatically renewed up to 30 days or 7 days after the check-out date, whichever comes first. Depending on the length of your reservation you might get a couple of notifications from your bank with the pre-authorization renewal notice.</0><0>After the 7 days of last pre-authorization, the amount will be completely released and available in your bank account.</0></1><br/><0>What if damage occurs?</0><1><0>Your host has up to 7 days after the check-out date of your reservation to review for damage.</0><0>During that period if the accommodation terms were broken or the property assets were damaged, your host could charge the deposit amount as a penalty. If 7 days have passed after the check-out, your host won't be able to charge the amount anymore.</0></1>\",\"property_protection\":\"Property Protection\",\"error_continue_without_taxes\":\"Please add the ages of the guests to continue with the taxes calculations.\",\"confirm_identity_documents_description\":\"We will confirm your identity using biometric technology that uses images of you and your identification, and other data sources.\",\"confirm_identity_documents_document_only_description\":\"Take or upload photo of your travel document in order to verify your identity before your arrival. The photo of the document should be the same that you will use to complete the check-in registration.\",\"select_nationality\":\"Select your nationality\",\"type_verify_selector_title\":\"Select how to verify your identity\",\"identity_type_selector_title\":\"Select identification type\",\"dont_verify_my_identity\":\"Don't Verify My Identity\",\"could_not_detect_mrz\":\"Could not detect the MRZ.\",\"try_again_mrz_or_contact\":\"Please take a picture of the side of the document where the MRZ is. If the error persists, contact our support team.\",\"mrz_check_id_is_missing\":\"MRZ Check ID is missing.\",\"front\":\"Front\",\"selfie\":\"Selfie\",\"first_we_take_front_photo\":\"First we’ll take a photo of the front of your photo ID\",\"now_we_take_back_photo\":\"Now, flip the ID over to take a photo of the backside\",\"fit_your_face_in_oval\":\"Fit your face inside the oval shape\",\"fit_your_face_inside_the_camera\":\"Fit your face inside the camera, make sure to remove glasses, headphones and other accessories.\",\"register_another_guest_lowwer_case\":\"Register Another Guest\",\"guest_registered\":\"Guest registered!\",\"guest_registered_modal_description\":\"<0>{{name}}</0> has been successfully registered. Would you like to go to the next step or to register more guests right now?\",\"no_guests\":\"No guests\",\"sign_up\":\"Sign Up\",\"skip_sign_up\":\"Skip Sign Up\",\"next_time_you_will_checkin\":\"Next time you’ll do the check-in in less than 1 minute\",\"sign_up_with_google\":\"Sign up with Google\",\"or_continue_with_email\":\"Or continue with email\",\"enter_your_email\":\"Enter your email\",\"password\":\"Password\",\"already_have_an_account\":\"Already have an account?\",\"login\":\"Login\",\"forgot_password\":\"Forgot password?\",\"register_now\":\"Register Now\",\"dont_have_an_account\":\"Don’t have an account?\",\"card_holder\":\"Card Holder\",\"all_guests_registered\":\"All guests registered\",\"count_guests_registered\":\"{{count}} pending guests\",\"home\":\"Home\",\"account\":\"Account\",\"return_to_home\":\"Return to Home\",\"congratulations\":\"Congratulations!\",\"go_to_payment\":\"Go to payment\",\"stay\":\"Stay\",\"update_all\":\"Update all\",\"next_guest\":\"Next guest\",\"invoicing_details\":\"Invoicing Details\",\"invoicing_address\":\"Invoicing address\",\"make_your_experience_unforgettable\":\"Make your Experience unforgettable\",\"explore_all_experiences\":\"Explore All Experiences\",\"maybe_later\":\"Maybe later\",\"find_and_book_your_adventure\":\"Find and book your adventure\",\"request_experience\":\"Request Experience\",\"delete_this_guest\":\"Delete this guest?\",\"delete_this_guest_description\":\"Are you sure you want to delete this guest? This action cannot be undone.\",\"drag_and_drop_your_photo_here\":\"Drag and drop your photo here\",\"or_click_to_browse\":\"or click to browse\",\"commercial_name_uppercase\":\"COMMERCIAL NAME\",\"id_type_uppercase\":\"ID TYPE\",\"fiscal_code_uppercase\":\"FISCAL CODE\",\"street_uppercase\":\"STREET\",\"city_uppercase\":\"CITY\",\"province_uppercase\":\"PROVINCE\",\"postal_code\":\"Postal code\",\"contract_preview\":\"Contract Preview\",\"download\":\"Download\",\"early_checkin\":\"Early check-in\",\"description\":\"Description\",\"total_price\":\"Total price\",\"select_time\":\"Select time\",\"select_date\":\"Select date\",\"to\":\"To\",\"from\":\"From\",\"off_uppercase\":\"OFF\",\"view_details\":\"View Details\",\"hours\":\"hours\",\"total_lowercase\":\"total\",\"starting_from\":\"Starting from\",\"no_data\":\"no data\",\"loading_your\":\"Loading your…\",\"reservation_data\":\"Reservation Data\",\"form_data_is_missing\":\"Form data is missing\",\"select_sex\":\"Select sex\",\"are_you_done\":\"Are you done?\",\"booked_exclamation\":\"Booked!\",\"keep_exploring\":\"Keep exploring\",\"booked_uppercase\":\"BOOKED\",\"unit_lowercase\":\"unit\",\"person_lowercase\":\"person\",\"day_lowercase\":\"day\",\"group_lowercase\":\"group\",\"romantic\":\"Romantic\",\"health_and_spa\":\"Health & Spa\",\"art_and_culture\":\"Art & Culture\",\"services\":\"Services\",\"f_and_b\":\"F&B\",\"seasonal\":\"Seasonal\",\"contract_not_available\":\"Contract not Available\",\"contract_not_available_description\":\"The contract sample is not available at the moment, please try again later or contact your host to get a sample.\",\"under_number\":\"Under {{number}}\",\"children\":\"Children\",\"connection_issue\":\"Connection issue\",\"connection_issue_description\":\"The door couldn't be opened at the moment, please go back to the link and try again.<1/><1/>If the error persist please contact your host for further instructions.\",\"virtual_keys_not_available_title\":\"Virtual keys outside the booking period\",\"virtual_keys_not_available_description\":\"The link for the virtual keys can only be used <2>within the date range of your booking.</2><3/><3/>Please contact your host for further instructions.\",\"door_opened_exclamation\":\"Door opened!\",\"virtual_keys_success_description\":\"The {{doorName}} door has been successfully opened. Please be careful and make sure the door is locked.\",\"you_have_two_ways\":\"You have two ways\",\"accept_superhog_data_verification\":\"I accept\",\"accept_superhog_data_verification_title\":\"Superhog data verification\",\"superhog_info_tooltip\":\"This property includes damage protection service by Superhog, we need to send your data to Superhog for a verification to check if you are eligible for the damage protection guarantee. For more information, please contact your host.\",\"accept_superhog_terms\":\"Please accept the Superhog agreement\",\"accept_superhog_terms_description\":\" In order to continue you must accept the <0>Superhog data verification agreement</0>.\",\"discard_changes_question\":\"Discard changes?\",\"discard_changes_question_subtitle\":\"There are some unsaved changes, would you like to discard the changes?\",\"warning_close_taxes_modal_title\":\"Discard calculation changes?\",\"warning_close_taxes_modal_description\":\"You have made some changes on the tourist taxes calculation, do you want to save the changes or discard them?\",\"save\":\"Save\",\"take_picture_with_your_webcam\":\"Take a picture with your webcam\",\"upload_file\":\"Upload a file\",\"retake\":\"Retake\",\"unpaid\":\"Unpaid\",\"discard\":\"Discard\",\"no_photo\":\"No photo\",\"only_doc_file_types\":\"Solo archivos JPEG, JPG o PNG\",\"deleted\":\"Deleted\",\"delete_guest_question\":\"Delete guest?\",\"delete_guest_description\":\"Are you sure you want to delete this guest? All data will be deleted and this action can´t be undone.\",\"yes_delete\":\"Yes, delete\",\"welcome_to_housing_name\":\"Welcome to {{housingName}}\",\"welcome_to_housing_name_subtitle\":\"To start the online check-in provide one of the following data:\",\"booking_reference\":\"Booking reference\",\"enter_reference_code\":\"Enter reference code\",\"lead_guest_email_tooltip\":\"The email address used when booking the reservation\",\"find_booking\":\"Find booking\",\"find_my_booking_via\":\"Find my booking via\",\"checkin_date_and_email\":\"Check-in date and Email\",\"provide_more_details\":\"Provide more details\",\"provide_more_details_description\":\"Please provide additional details about your reservation to start the online check-in process.\",\"reservation_details\":\"Reservation details\",\"guest_to_register\":\" Number of guests in the reservation\",\"enter_number_of_guests\":\"Enter number of guests\",\"go_back\":\"Go back\",\"minimum_check_in_date_is\":\"Minimum check-in date is {{date}}\",\"lets_find_your_booking\":\"Let’s find your booking\",\"remove_guest\":\"Remove guest\",\"max_file_size_is_number_mb\":\"Max file size is {{number}}MB\",\"incorrect_file_type_only_pdf_and_file_types_allowed\":\"Incorrect file type. Only JPEG, JPG, PNG or PDF files are allowed\",\"incorrect_file_type_only_file_types_allowed\":\"Incorrect file type. Only JPEG, JPG or PNG files are allowed\",\"number_of_people\":\"Number of people\",\"number_of_groups\":\"Number of groups\",\"number_of_days\":\"Number of days\",\"could_not_detect_your_face\":\"Could not detect your face.\",\"incorrect_file_type_only_jpeg_or_jpg_allowed\":\"Incorrect file type. Only JPEG or JPG files are allowed.\",\"photos_missing_for_identity_verification_error\":\"Document photo or selfie is missing. Please take all photos to proceed.\",\"document_photo_missing_for_identity_verification_error\":\"Document photo is missing. Please take a photo of the document and then a selfie to proceed with the verification\",\"accept_superhog_data_verification_title_guest\":\"the Guest Agreement\",\"terms_and_conditions_link_guest\":\"https://superhog.com/superhog-guest-agreement/\",\"sh_and\":\" and \",\"guest_cannot_be_deleted\":\"Guest cannot be deleted\",\"guest_cannot_be_deleted_description\":\"This is the lead guest and according to the local authorities the lead guest requires to complete more data than the rest of the guests so it cannot be deleted at this moment. <br/><br/> If you want to delete the lead guest data, please delete the other guest first.\",\"guest_list\":\"Guest List\",\"not_registered_guest_yet\":\"There are not registered guests yet\",\"register_new_guest\":\"Regiester new guest\",\"do_you_want_the_pending_guest_to_register_themselves\":\"Do you want the pending guest to register themselves?\",\"share_registrarion_link\":\"Share registrarion link\",\"or_there_are_no_more_guest_to_register\":\"Or there are no more guest to register?\",\"all_guests_are_registered\":\"All guests are registered\",\"booking_details\":\"Booking Details\",\"arrival_time_capitalize\":\"Arrival Time\",\"leaving_tme_capitalize\":\"Leaving Time\",\"adult\":\"Adult\",\"we_will_confirm_your_identity_biometric\":\"We will confirm your identity using biometric technology that uses images of you and your identification, and other data sources\",\"select_identification_type\":\"Now, Select identification type\",\"enter_your_nationality\":\"Enter your nationality\",\"write_or_select_nationality\":\"Write or select nationality\",\"start_verification\":\"Start Verification\",\"select_verification_type\":\"Select how you’d like to verify your identity\",\"add_personal_data_form\":\"Add Personal data and Sign\",\"birth_place_country\":\"Birth place country\",\"enter_full_tourist_tax\":\"Enter tourist tax\",\"full_tourist_tax\":\"Full tourist tax\",\"enter_city\":\"Enter City\"}");
 
 /***/ }),
 

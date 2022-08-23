@@ -3080,14 +3080,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
 /* harmony import */ var _Routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Routes */ "./src/Routes.tsx");
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! history */ "./node_modules/history/index.js");
 /* harmony import */ var _context_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./context/index */ "./src/context/index.tsx");
 
 
 
-
-
-var browserHistory = (0,history__WEBPACK_IMPORTED_MODULE_4__.createBrowserHistory)();
+ // const browserHistory = createBrowserHistory();
 
 function App() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_context_index__WEBPACK_IMPORTED_MODULE_3__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Routes__WEBPACK_IMPORTED_MODULE_2__.default, null));
@@ -6613,7 +6610,7 @@ function AppProviders(_ref) {
     client: queryClient
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_i18next__WEBPACK_IMPORTED_MODULE_6__.I18nextProvider, {
     i18n: _i18n__WEBPACK_IMPORTED_MODULE_5__.default
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ChekinSDK__WEBPACK_IMPORTED_MODULE_1__.ChekinSDKProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_reservation__WEBPACK_IMPORTED_MODULE_2__.ReservationProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_guest__WEBPACK_IMPORTED_MODULE_3__.GuestProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, null, children))))));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ChekinSDK__WEBPACK_IMPORTED_MODULE_1__.ChekinSDKProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_reservation__WEBPACK_IMPORTED_MODULE_2__.ReservationProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_guest__WEBPACK_IMPORTED_MODULE_3__.GuestProvider, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.HashRouter, null, children))))));
 }
 
 AppProviders.defaultProps = defaultProps;
@@ -6843,7 +6840,7 @@ function useFetchLocations(props) {
       locations = _useQuery.data,
       isError = _useQuery.isError,
       error = _useQuery.error,
-      isValidating = _useQuery.isLoading,
+      isLoadingLocations = _useQuery.isLoading,
       refetchLocations = _useQuery.refetch;
 
   var _useMutation = (0,react_query__WEBPACK_IMPORTED_MODULE_1__.useMutation)(mutateLocations, {
@@ -6872,7 +6869,7 @@ function useFetchLocations(props) {
     locations: locations,
     revalidateLocations: revalidateLocations,
     isError: isError,
-    isValidating: isValidating,
+    isLoadingLocations: isLoadingLocations,
     error: error,
     locationsAsOptions: locationsAsOptions,
     citiesAsOptions: citiesAsOptions,
@@ -7028,6 +7025,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/useTranslation.js");
+/* harmony import */ var react_i18next__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-i18next */ "./node_modules/react-i18next/dist/es/Trans.js");
 /* harmony import */ var _context_reservation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/reservation */ "./src/context/reservation.tsx");
 /* harmony import */ var _styled_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styled/common */ "./src/styled/common.ts");
 /* harmony import */ var _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../pages/AddPersonalDataForm/types */ "./src/pages/AddPersonalDataForm/types.ts");
@@ -7045,7 +7043,8 @@ var _excluded = ["value"],
     _excluded2 = ["value"],
     _excluded3 = ["value"],
     _excluded4 = ["value"],
-    _excluded5 = ["onChange"];
+    _excluded5 = ["onChange"],
+    _excluded6 = ["onChange"];
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
@@ -7104,8 +7103,7 @@ function useGuestFormFields() {
               isEqual = false;
             }
           }
-        } // if (!isEqual) {
-
+        }
 
         for (var field in f) {
           var _f$field;
@@ -7114,13 +7112,13 @@ function useGuestFormFields() {
         }
 
         return _extends({}, current);
-      } // }
-
+      }
     });
   }, [f]);
 
   var _useFetchLocations = (0,_useFetchLocations__WEBPACK_IMPORTED_MODULE_9__.useFetchLocations)(),
       locationsAsOptions = _useFetchLocations.locationsAsOptions,
+      isLoadingLocations = _useFetchLocations.isLoadingLocations,
       citiesAsOptions = _useFetchLocations.citiesAsOptions,
       isCitiesLoading = _useFetchLocations.isCitiesLoading;
 
@@ -7137,276 +7135,9 @@ function useGuestFormFields() {
     }
 
     return label + " (" + t("optional") + ")";
-  }, [t]); //   () => ({
-  //     [FORM_NAMES.name]: (
-  //       required = formFields?.[FORM_NAMES.name]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Input
-  //           label={getRequiredOrOptionalFieldLabel(t('name'), required)}
-  //           error={errors[FORM_NAMES.name]?.message}
-  //           placeholder={t('enter_name')}
-  //           {...register(FORM_NAMES.name, {
-  //             required,
-  //             pattern: {
-  //               value: getNamePattern(housingCountryCode),
-  //               message: t('cant_contain_number_and_symbols'),
-  //             },
-  //             maxLength: {
-  //               value: maxNamesInputLength,
-  //               message: t('max_length', { length: maxNamesInputLength }),
-  //             },
-  //           })}
-  //           // disabled={isLoadingCustomForm}
-  //           autoCorrect='off'
-  //           spellCheck={false}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.surname]: (
-  //       required = formFields?.[FORM_NAMES.surname]?.required
-  //     ) => (
-  //   <FormFieldWrapper>
-  //     <Input
-  //       label={getRequiredOrOptionalFieldLabel(t('surname'), required)}
-  //       placeholder={t('enter_surname')}
-  //       {...register(FORM_NAMES.surname, {
-  //         required,
-  //         pattern: {
-  //           value: getNamePattern(housingCountryCode),
-  //           message: t('cant_contain_number_and_symbols'),
-  //         },
-  //         maxLength: {
-  //           value: maxNamesInputLength,
-  //           message: t('max_length', { length: maxNamesInputLength }),
-  //         },
-  //       })}
-  //       error={errors[FORM_NAMES.surname]?.message}
-  //       // disabled={isLoadingCustomForm}
-  //       autoCorrect='off'
-  //       spellCheck={false}
-  //     />
-  //   </FormFieldWrapper>
-  // ),
-  //     [FORM_NAMES.second_surname]: (
-  //       required = formFields?.[FORM_NAMES.second_surname]?.required
-  //     ) => {
-  //       return (
-  // <FormFieldWrapper>
-  //   <Input
-  //     label={getRequiredOrOptionalFieldLabel(
-  //       t('second_surname'),
-  //       required
-  //     )}
-  //     placeholder={t('enter_second_surname')}
-  //     {...register(FORM_NAMES.second_surname, {
-  //       required,
-  //       pattern: {
-  //         value: getNamePattern(housingCountryCode),
-  //         message: t('cant_contain_number_and_symbols'),
-  //       },
-  //       maxLength: {
-  //         value: maxNamesInputLength,
-  //         message: t('max_length', { length: maxNamesInputLength }),
-  //       },
-  //     })}
-  //     error={errors[FORM_NAMES.second_surname]?.message}
-  //     // disabled={isLoadingCustomForm}
-  //     autoCorrect='off'
-  //     spellCheck={false}
-  //   />
-  // </FormFieldWrapper>
-  //       );
-  //     },
-  //     [FORM_NAMES.nationality]: (
-  //       required = formFields?.[FORM_NAMES.nationality]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Controller
-  //           name={FORM_NAMES.nationality}
-  //           rules={{ required }}
-  //           control={control}
-  //           render={({
-  //             field: { value, ...restField },
-  //             fieldState: { error },
-  //           }) => (
-  //             <Select
-  //               placeholder={t('select')}
-  //               options={locationsAsOptions}
-  //               label={getRequiredOrOptionalFieldLabel(
-  //                 t('nationality'),
-  //                 required
-  //               )}
-  //               error={error?.message}
-  //               // disabled={isLoadingCustomForm}
-  //               value={value as SelectOptionType}
-  //               {...restField}
-  //             />
-  //           )}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.birth_place_country]: (
-  //       required = formFields?.[FORM_NAMES.birth_place_country]?.required
-  //     ) => (
-  //       <FormFieldWrapper>
-  //         <Controller
-  //           name={FORM_NAMES.birth_place_country}
-  //           rules={{ required }}
-  //           control={control}
-  //           render={({
-  //             field: { value, ...restField },
-  //             fieldState: { error },
-  //           }) => (
-  //             <Select
-  //               placeholder={t('select')}
-  //               options={locationsAsOptions}
-  //               label={getRequiredOrOptionalFieldLabel(
-  //                 t('birth_place_country'),
-  //                 required
-  //               )}
-  //               error={error?.message}
-  //               // disabled={isLoadingCustomForm}
-  //               value={value as SelectOptionType}
-  //               onChange={(option) => {
-  //                 console.log(option);
-  //                 if (option.value === COUNTRY_CODES.italy) {
-  //                   setBirthCountry?.(COUNTRY_CODES.italy);
-  //                 }
-  //               }}
-  //               // {...restField}
-  //             />
-  //           )}
-  //         />
-  //       </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.birth_place_city]: (
-  //       required = formFields?.[FORM_NAMES.birth_place_city]?.required
-  //     ) => {
-  //       if (formFields?.[FORM_NAMES.birth_place_city]?.active) {
-  //         return (
-  //           <FormFieldWrapper>
-  //             <Controller
-  //               name={FORM_NAMES.birth_place_city}
-  //               rules={{ required }}
-  //               control={control}
-  //               render={({
-  //                 field: { value, ...restField },
-  //                 fieldState: { error },
-  //               }) => (
-  //                 <AsyncSelect
-  //                   placeholder={t('select')}
-  //                   loadOptions={(inputValue, callback) => {
-  //                     callback(getBestMatches(citiesAsOptions, inputValue));
-  //                   }}
-  //                   label={getRequiredOrOptionalFieldLabel(
-  //                     t('city_of_birth'),
-  //                     required
-  //                   )}
-  //                   error={error?.message}
-  //                   disabled={isCitiesLoading}
-  //                   // value={value as SelectOptionType}
-  //                   loading={isCitiesLoading}
-  //                   cacheOptions
-  //                   defaultValues
-  //                   {...restField}
-  //                 />
-  //               )}
-  //             />
-  //           </FormFieldWrapper>
-  //         );
-  //       }
-  //     },
-  //     [FORM_NAMES.birth_date]: (
-  //       required = formFields?.[FORM_NAMES.birth_date]?.required
-  //     ) => (
-  // <FormFieldWrapper>
-  //   <Controller
-  //     name={FORM_NAMES.birth_date}
-  //     rules={{
-  //       required,
-  //       // validate: value => {
-  //       //   if (!value) {
-  //       //     return true;
-  //       //   }
-  //       //   const docDateOfIssue = getValues()[FORM_NAMES.docDateOfIssue];
-  //       //   return validateBirthDate(value, docDateOfIssue);
-  //       // },
-  //     }}
-  //     control={control}
-  //     render={({
-  //       field: { onChange, ...restField },
-  //       fieldState: { error },
-  //     }) => (
-  //       <Datepicker
-  //         // disabled={isLoadingCustomForm}
-  //         error={error?.message}
-  //         label={getRequiredOrOptionalFieldLabel(
-  //           t('birth_date'),
-  //           required
-  //         )}
-  //         onChange={(value) => {
-  //           return onChange(value?.toString());
-  //         }}
-  //         {...restField}
-  //       />
-  //     )}
-  //   />
-  // </FormFieldWrapper>
-  //     ),
-  //     [FORM_NAMES.document_type]: (
-  //       required = formFields?.[FORM_NAMES.document_type]?.required
-  //     ) => (
-  // <FormFieldWrapper>
-  //   <Controller
-  //     name={FORM_NAMES.document_type}
-  //     rules={{ required }}
-  //     control={control}
-  //     render={({
-  //       field: { value, ...restField },
-  //       fieldState: { error },
-  //     }) => (
-  //       <Select
-  //         placeholder={t('select')}
-  //         options={formFields?.[FORM_NAMES.document_type]?.options}
-  //         label={getRequiredOrOptionalFieldLabel(
-  //           t('select_nationality_and_document_type'),
-  //           required
-  //         )}
-  //         error={error?.message}
-  //         // disabled={isLoadingCustomForm}
-  //         value={value as SelectOptionType}
-  //         {...restField}
-  //       />
-  //     )}
-  //   />
-  // </FormFieldWrapper>
-  //     ),
-  //   }),
-  //   [
-  //     t,
-  //     formFields,
-  //     control,
-  //     errors,
-  //     getRequiredOrOptionalFieldLabel,
-  //     housingCountryCode,
-  //     register,
-  //     citiesAsOptions,
-  //     locationsAsOptions,
-  //   ]
-  // );
-  // const renderFormFields = React.useCallback(() => {
-  //   return displayingFormNames?.map((formName) => {
-  //     return (
-  //       <React.Fragment key={formName}>
-  //         {fields[formName as keyof typeof fields]?.()}
-  //       </React.Fragment>
-  //     );
-  //   });
-  // }, [displayingFormNames, fields]
-
+  }, [t]);
   var renderFormFields = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
-    var _formFields$FORM_NAME, _formFields$FORM_NAME2, _errors$FORM_NAMES$na, _formFields$FORM_NAME3, _formFields$FORM_NAME4, _formFields$FORM_NAME5, _formFields$FORM_NAME6, _errors$FORM_NAMES$su, _formFields$FORM_NAME7, _formFields$FORM_NAME8, _formFields$FORM_NAME9, _errors$FORM_NAMES$se, _formFields$FORM_NAME10, _formFields$FORM_NAME11, _formFields$FORM_NAME13, _formFields$FORM_NAME14, _formFields$FORM_NAME16, _formFields$FORM_NAME17, _formFields$FORM_NAME19, _formFields$FORM_NAME20, _formFields$FORM_NAME22, _formFields$FORM_NAME23, _formFields$FORM_NAME25, _formFields$FORM_NAME26, _formFields$FORM_NAME29, _formFields$FORM_NAME30;
+    var _formFields$FORM_NAME, _formFields$FORM_NAME2, _errors$FORM_NAMES$na, _formFields$FORM_NAME3, _formFields$FORM_NAME4, _formFields$FORM_NAME5, _formFields$FORM_NAME6, _errors$FORM_NAMES$su, _formFields$FORM_NAME7, _formFields$FORM_NAME8, _formFields$FORM_NAME9, _errors$FORM_NAMES$se, _formFields$FORM_NAME10, _formFields$FORM_NAME11, _formFields$FORM_NAME13, _formFields$FORM_NAME14, _formFields$FORM_NAME16, _formFields$FORM_NAME17, _formFields$FORM_NAME19, _formFields$FORM_NAME20, _formFields$FORM_NAME22, _formFields$FORM_NAME23, _formFields$FORM_NAME25, _formFields$FORM_NAME26, _formFields$FORM_NAME29, _formFields$FORM_NAME30, _formFields$FORM_NAME32, _formFields$FORM_NAME33, _formFields$FORM_NAME36, _formFields$FORM_NAME37, _formFields$FORM_NAME39, _formFields$FORM_NAME40, _formFields$FORM_NAME42, _formFields$FORM_NAME43, _formFields$FORM_NAME45, _formFields$FORM_NAME46, _formFields$FORM_NAME47;
 
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, (formFields == null ? void 0 : (_formFields$FORM_NAME = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.name]) == null ? void 0 : _formFields$FORM_NAME.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
       label: getRequiredOrOptionalFieldLabel(t("name"), formFields == null ? void 0 : (_formFields$FORM_NAME2 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.name]) == null ? void 0 : _formFields$FORM_NAME2.required),
@@ -7640,7 +7371,121 @@ function useGuestFormFields() {
           }
         }, restField));
       }
-    }))); // return displayingFormNames?.map((formName) => {
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME32 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME32.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME33 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME33.active
+      },
+      control: control,
+      render: function render(_ref8) {
+        var _formFields$FORM_NAME34, _formFields$FORM_NAME35;
+
+        var field = _ref8.field,
+            error = _ref8.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select_sex"),
+          label: getRequiredOrOptionalFieldLabel(t("sex"), formFields == null ? void 0 : (_formFields$FORM_NAME34 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME34.required),
+          options: formFields == null ? void 0 : (_formFields$FORM_NAME35 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.gender]) == null ? void 0 : _formFields$FORM_NAME35.options,
+          error: error == null ? void 0 : error.message // disabled={isLoadingCustomForm}
+
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME36 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME36.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME37 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME37.required
+      },
+      control: control,
+      render: function render(_ref9) {
+        var _formFields$FORM_NAME38;
+
+        var field = _ref9.field,
+            error = _ref9.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select"),
+          label: getRequiredOrOptionalFieldLabel(t("citizenship"), formFields == null ? void 0 : (_formFields$FORM_NAME38 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.citizenship]) == null ? void 0 : _formFields$FORM_NAME38.required),
+          options: locationsAsOptions,
+          loading: isLoadingLocations,
+          error: error == null ? void 0 : error.message // trimFilterBy={4}
+          ,
+          disabled: isLoadingLocations
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME39 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME39.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME40 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME40.required //  validate: value => {
+        //    if (!value) {
+        //      return true;
+        //    }
+        //    const birthDate = getValues()[FORM_NAMES.birthDate];
+        //    return validateIssueDate(value, birthDate);
+        //  },
+
+      },
+      control: control,
+      render: function render(_ref10) {
+        var _formFields$FORM_NAME41;
+
+        var _ref10$field = _ref10.field,
+            _onChange2 = _ref10$field.onChange,
+            restField = _objectWithoutPropertiesLoose(_ref10$field, _excluded6),
+            error = _ref10.fieldState.error;
+
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldDatepicker__WEBPACK_IMPORTED_MODULE_6__.default, _extends({
+          withTooltip: true,
+          tooltipContentKey: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_i18next__WEBPACK_IMPORTED_MODULE_15__.Trans, {
+            i18nKey: "date_when_the_doc_created"
+          }, "Date when the document was created. (It is ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("b", null, "not"), " the expiration date)"),
+          onChange: function onChange(value) {
+            return _onChange2(value == null ? void 0 : value.toString());
+          },
+          error: error == null ? void 0 : error.message //  disabled={isLoadingCustomForm}
+          ,
+          label: getRequiredOrOptionalFieldLabel(t("date_of_issue"), formFields == null ? void 0 : (_formFields$FORM_NAME41 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_issue_date]) == null ? void 0 : _formFields$FORM_NAME41.required)
+        }, restField));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME42 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME42.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_13__.Controller, {
+      name: _pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country,
+      rules: {
+        required: formFields == null ? void 0 : (_formFields$FORM_NAME43 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME43.required
+      },
+      control: control,
+      render: function render(_ref11) {
+        var _formFields$FORM_NAME44;
+
+        var field = _ref11.field,
+            error = _ref11.fieldState.error;
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldSelect__WEBPACK_IMPORTED_MODULE_5__.default, _extends({
+          placeholder: t("select"),
+          label: getRequiredOrOptionalFieldLabel(t("country_of_issue"), formFields == null ? void 0 : (_formFields$FORM_NAME44 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_country]) == null ? void 0 : _formFields$FORM_NAME44.required),
+          options: locationsAsOptions,
+          loading: isLoadingLocations,
+          error: error == null ? void 0 : error.message,
+          disabled: isLoadingLocations
+        }, field));
+      }
+    })), (formFields == null ? void 0 : (_formFields$FORM_NAME45 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME45.active) && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled_common__WEBPACK_IMPORTED_MODULE_2__.FormFieldWrapper, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_FieldInput__WEBPACK_IMPORTED_MODULE_4__.default, _extends({
+      label: getRequiredOrOptionalFieldLabel(t("name"), formFields == null ? void 0 : (_formFields$FORM_NAME46 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME46.required) // error={errors[FORM_NAMES.document_expedition_city]?.message}
+      ,
+      placeholder: t("enter_city")
+    }, register(_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city, {
+      required: formFields == null ? void 0 : (_formFields$FORM_NAME47 = formFields[_pages_AddPersonalDataForm_types__WEBPACK_IMPORTED_MODULE_3__.FORM_NAMES.document_expedition_city]) == null ? void 0 : _formFields$FORM_NAME47.required,
+      pattern: {
+        value: (0,_pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.getNamePattern)(housingCountryCode),
+        message: t("cant_contain_number_and_symbols")
+      },
+      maxLength: {
+        value: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength,
+        message: t("max_length", {
+          length: _pages_AddPersonalDataForm_utils__WEBPACK_IMPORTED_MODULE_7__.maxNamesInputLength
+        })
+      }
+    }), {
+      // disabled={isLoadingCustomForm}
+      autoCorrect: "off",
+      spellCheck: false
+    })))); // return displayingFormNames?.map((formName) => {
     //   return (
     //     <React.Fragment key={formName}>
     //       {fields[formName as keyof typeof fields]?.()}
@@ -23028,6 +22873,100 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 }
 
 module.exports = hoistNonReactStatics;
+
+
+/***/ }),
+
+/***/ "./node_modules/html-escaper/esm/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/html-escaper/esm/index.js ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "escape": function() { return /* binding */ escape; },
+/* harmony export */   "unescape": function() { return /* binding */ unescape; }
+/* harmony export */ });
+/**
+ * Copyright (C) 2017-present by Andrea Giammarchi - @WebReflection
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+var replace = ''.replace;
+
+var ca = /[&<>'"]/g;
+var es = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34);/g;
+
+var esca = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  "'": '&#39;',
+  '"': '&quot;'
+};
+var unes = {
+  '&amp;': '&',
+  '&#38;': '&',
+  '&lt;': '<',
+  '&#60;': '<',
+  '&gt;': '>',
+  '&#62;': '>',
+  '&apos;': "'",
+  '&#39;': "'",
+  '&quot;': '"',
+  '&#34;': '"'
+};
+
+function escape(es) {
+  return replace.call(es, ca, pe);
+};
+
+function unescape(un) {
+  return replace.call(un, es, cape);
+};
+
+function pe(m) {
+  return esca[m];
+}
+
+function cape(m) {
+  return unes[m];
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js ***!
+  \*******************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var void_elements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! void-elements */ "./node_modules/void-elements/index.js");
+/* harmony import */ var void_elements__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(void_elements__WEBPACK_IMPORTED_MODULE_0__);
+var t=/\s([^'"/\s><]+?)[\s/>]|([^\s=]+)=\s?(".*?"|'.*?')/g;function n(n){var r={type:"tag",name:"",voidElement:!1,attrs:{},children:[]},i=n.match(/<\/?([^\s]+?)[/\s>]/);if(i&&(r.name=i[1],((void_elements__WEBPACK_IMPORTED_MODULE_0___default())[i[1]]||"/"===n.charAt(n.length-2))&&(r.voidElement=!0),r.name.startsWith("!--"))){var s=n.indexOf("--\x3e");return{type:"comment",comment:-1!==s?n.slice(4,s):""}}for(var a=new RegExp(t),c=null;null!==(c=a.exec(n));)if(c[0].trim())if(c[1]){var o=c[1].trim(),l=[o,""];o.indexOf("=")>-1&&(l=o.split("=")),r.attrs[l[0]]=l[1],a.lastIndex--}else c[2]&&(r.attrs[c[2]]=c[3].trim().substring(1,c[3].length-1));return r}var r=/<[a-zA-Z0-9\-\!\/](?:"[^"]*"|'[^']*'|[^'">])*>/g,i=/^\s*$/,s=Object.create(null);function a(e,t){switch(t.type){case"text":return e+t.content;case"tag":return e+="<"+t.name+(t.attrs?function(e){var t=[];for(var n in e)t.push(n+'="'+e[n]+'"');return t.length?" "+t.join(" "):""}(t.attrs):"")+(t.voidElement?"/>":">"),t.voidElement?e:e+t.children.reduce(a,"")+"</"+t.name+">";case"comment":return e+"\x3c!--"+t.comment+"--\x3e"}}var c={parse:function(e,t){t||(t={}),t.components||(t.components=s);var a,c=[],o=[],l=-1,m=!1;if(0!==e.indexOf("<")){var u=e.indexOf("<");c.push({type:"text",content:-1===u?e:e.substring(0,u)})}return e.replace(r,function(r,s){if(m){if(r!=="</"+a.name+">")return;m=!1}var u,f="/"!==r.charAt(1),h=r.startsWith("\x3c!--"),p=s+r.length,d=e.charAt(p);if(h){var v=n(r);return l<0?(c.push(v),c):((u=o[l]).children.push(v),c)}if(f&&(l++,"tag"===(a=n(r)).type&&t.components[a.name]&&(a.type="component",m=!0),a.voidElement||m||!d||"<"===d||a.children.push({type:"text",content:e.slice(p,e.indexOf("<",p))}),0===l&&c.push(a),(u=o[l-1])&&u.children.push(a),o[l]=a),(!f||a.voidElement)&&(l>-1&&(a.voidElement||a.name===r.slice(2,-1))&&(l--,a=-1===l?c:o[l]),!m&&"<"!==d&&d)){u=-1===l?c:o[l].children;var x=e.indexOf("<",p),g=e.slice(p,-1===x?void 0:x);i.test(g)&&(g=" "),(x>-1&&l+u.length>=0||" "!==g)&&u.push({type:"text",content:g})}}),c},stringify:function(e){return e.reduce(function(e,t){return e+a("",t)},"")}};/* harmony default export */ __webpack_exports__["default"] = (c);
+//# sourceMappingURL=html-parse-stringify.module.js.map
 
 
 /***/ }),
@@ -58494,6 +58433,306 @@ function I18nextProvider(_ref) {
 
 /***/ }),
 
+/***/ "./node_modules/react-i18next/dist/es/Trans.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-i18next/dist/es/Trans.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "nodesToString": function() { return /* binding */ nodesToString; },
+/* harmony export */   "Trans": function() { return /* binding */ Trans; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectWithoutProperties */ "./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js");
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var html_parse_stringify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! html-parse-stringify */ "./node_modules/html-parse-stringify/dist/html-parse-stringify.module.js");
+/* harmony import */ var html_escaper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! html-escaper */ "./node_modules/html-escaper/esm/index.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./context */ "./node_modules/react-i18next/dist/es/context.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils */ "./node_modules/react-i18next/dist/es/utils.js");
+
+
+
+var _excluded = ["format"],
+    _excluded2 = ["children", "count", "parent", "i18nKey", "context", "tOptions", "values", "defaults", "components", "ns", "i18n", "t", "shouldUnescape"];
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2__.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+
+
+
+function hasChildren(node, checkLength) {
+  if (!node) return false;
+  var base = node.props ? node.props.children : node.children;
+  if (checkLength) return base.length > 0;
+  return !!base;
+}
+
+function getChildren(node) {
+  if (!node) return [];
+  return node && node.children ? node.children : node.props && node.props.children;
+}
+
+function hasValidReactChildren(children) {
+  if (Object.prototype.toString.call(children) !== '[object Array]') return false;
+  return children.every(function (child) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child);
+  });
+}
+
+function getAsArray(data) {
+  return Array.isArray(data) ? data : [data];
+}
+
+function mergeProps(source, target) {
+  var newTarget = _objectSpread({}, target);
+
+  newTarget.props = Object.assign(source.props, target.props);
+  return newTarget;
+}
+
+function nodesToString(children, i18nOptions) {
+  if (!children) return '';
+  var stringNode = '';
+  var childrenArray = getAsArray(children);
+  var keepArray = i18nOptions.transSupportBasicHtmlNodes && i18nOptions.transKeepBasicHtmlNodesFor ? i18nOptions.transKeepBasicHtmlNodesFor : [];
+  childrenArray.forEach(function (child, childIndex) {
+    if (typeof child === 'string') {
+      stringNode += "".concat(child);
+    } else if ((0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child)) {
+      var childPropsCount = Object.keys(child.props).length;
+      var shouldKeepChild = keepArray.indexOf(child.type) > -1;
+      var childChildren = child.props.children;
+
+      if (!childChildren && shouldKeepChild && childPropsCount === 0) {
+        stringNode += "<".concat(child.type, "/>");
+      } else if (!childChildren && (!shouldKeepChild || childPropsCount !== 0)) {
+        stringNode += "<".concat(childIndex, "></").concat(childIndex, ">");
+      } else if (child.props.i18nIsDynamicList) {
+        stringNode += "<".concat(childIndex, "></").concat(childIndex, ">");
+      } else if (shouldKeepChild && childPropsCount === 1 && typeof childChildren === 'string') {
+        stringNode += "<".concat(child.type, ">").concat(childChildren, "</").concat(child.type, ">");
+      } else {
+        var content = nodesToString(childChildren, i18nOptions);
+        stringNode += "<".concat(childIndex, ">").concat(content, "</").concat(childIndex, ">");
+      }
+    } else if (child === null) {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("Trans: the passed in value is invalid - seems you passed in a null child.");
+    } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object') {
+      var format = child.format,
+          clone = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__.default)(child, _excluded);
+
+      var keys = Object.keys(clone);
+
+      if (keys.length === 1) {
+        var value = format ? "".concat(keys[0], ", ").concat(format) : keys[0];
+        stringNode += "{{".concat(value, "}}");
+      } else {
+        (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("react-i18next: the passed in object contained more than one variable - the object should look like {{ value, format }} where format is optional.", child);
+      }
+    } else {
+      (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warn)("Trans: the passed in value is invalid - seems you passed in a variable like {number} - please pass in variables for interpolation as full objects like {{number}}.", child);
+    }
+  });
+  return stringNode;
+}
+
+function renderNodes(children, targetString, i18n, i18nOptions, combinedTOpts, shouldUnescape) {
+  if (targetString === '') return [];
+  var keepArray = i18nOptions.transKeepBasicHtmlNodesFor || [];
+  var emptyChildrenButNeedsHandling = targetString && new RegExp(keepArray.join('|')).test(targetString);
+  if (!children && !emptyChildrenButNeedsHandling) return [targetString];
+  var data = {};
+
+  function getData(childs) {
+    var childrenArray = getAsArray(childs);
+    childrenArray.forEach(function (child) {
+      if (typeof child === 'string') return;
+      if (hasChildren(child)) getData(getChildren(child));else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && !(0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child)) Object.assign(data, child);
+    });
+  }
+
+  getData(children);
+  var ast = html_parse_stringify__WEBPACK_IMPORTED_MODULE_4__.default.parse("<0>".concat(targetString, "</0>"));
+
+  var opts = _objectSpread(_objectSpread({}, data), combinedTOpts);
+
+  function renderInner(child, node, rootReactNode) {
+    var childs = getChildren(child);
+    var mappedChildren = mapAST(childs, node.children, rootReactNode);
+    return hasValidReactChildren(childs) && mappedChildren.length === 0 ? childs : mappedChildren;
+  }
+
+  function pushTranslatedJSX(child, inner, mem, i, isVoid) {
+    if (child.dummy) child.children = inner;
+    mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+      key: i
+    }), isVoid ? undefined : inner));
+  }
+
+  function mapAST(reactNode, astNode, rootReactNode) {
+    var reactNodes = getAsArray(reactNode);
+    var astNodes = getAsArray(astNode);
+    return astNodes.reduce(function (mem, node, i) {
+      var translationContent = node.children && node.children[0] && node.children[0].content && i18n.services.interpolator.interpolate(node.children[0].content, opts, i18n.language);
+
+      if (node.type === 'tag') {
+        var tmp = reactNodes[parseInt(node.name, 10)];
+        if (!tmp && rootReactNode.length === 1 && rootReactNode[0][node.name]) tmp = rootReactNode[0][node.name];
+        if (!tmp) tmp = {};
+        var child = Object.keys(node.attrs).length !== 0 ? mergeProps({
+          props: node.attrs
+        }, tmp) : tmp;
+        var isElement = (0,react__WEBPACK_IMPORTED_MODULE_3__.isValidElement)(child);
+        var isValidTranslationWithChildren = isElement && hasChildren(node, true) && !node.voidElement;
+        var isEmptyTransWithHTML = emptyChildrenButNeedsHandling && (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && child.dummy && !isElement;
+        var isKnownComponent = (0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(children) === 'object' && children !== null && Object.hasOwnProperty.call(children, node.name);
+
+        if (typeof child === 'string') {
+          var value = i18n.services.interpolator.interpolate(child, opts, i18n.language);
+          mem.push(value);
+        } else if (hasChildren(child) || isValidTranslationWithChildren) {
+            var inner = renderInner(child, node, rootReactNode);
+            pushTranslatedJSX(child, inner, mem, i);
+          } else if (isEmptyTransWithHTML) {
+          var _inner = mapAST(reactNodes, node.children, rootReactNode);
+
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          }), _inner));
+        } else if (Number.isNaN(parseFloat(node.name))) {
+          if (isKnownComponent) {
+            var _inner2 = renderInner(child, node, rootReactNode);
+
+            pushTranslatedJSX(child, _inner2, mem, i, node.voidElement);
+          } else if (i18nOptions.transSupportBasicHtmlNodes && keepArray.indexOf(node.name) > -1) {
+            if (node.voidElement) {
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(node.name, {
+                key: "".concat(node.name, "-").concat(i)
+              }));
+            } else {
+              var _inner3 = mapAST(reactNodes, node.children, rootReactNode);
+
+              mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(node.name, {
+                key: "".concat(node.name, "-").concat(i)
+              }, _inner3));
+            }
+          } else if (node.voidElement) {
+            mem.push("<".concat(node.name, " />"));
+          } else {
+            var _inner4 = mapAST(reactNodes, node.children, rootReactNode);
+
+            mem.push("<".concat(node.name, ">").concat(_inner4, "</").concat(node.name, ">"));
+          }
+        } else if ((0,_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_1__.default)(child) === 'object' && !isElement) {
+          var content = node.children[0] ? translationContent : null;
+          if (content) mem.push(content);
+        } else if (node.children.length === 1 && translationContent) {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          }), translationContent));
+        } else {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.cloneElement)(child, _objectSpread(_objectSpread({}, child.props), {}, {
+            key: i
+          })));
+        }
+      } else if (node.type === 'text') {
+        var wrapTextNodes = i18nOptions.transWrapTextNodes;
+
+        var _content = shouldUnescape ? (0,html_escaper__WEBPACK_IMPORTED_MODULE_5__.unescape)(i18n.services.interpolator.interpolate(node.content, opts, i18n.language)) : i18n.services.interpolator.interpolate(node.content, opts, i18n.language);
+
+        if (wrapTextNodes) {
+          mem.push((0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(wrapTextNodes, {
+            key: "".concat(node.name, "-").concat(i)
+          }, _content));
+        } else {
+          mem.push(_content);
+        }
+      }
+
+      return mem;
+    }, []);
+  }
+
+  var result = mapAST([{
+    dummy: true,
+    children: children || []
+  }], ast, getAsArray(children || []));
+  return getChildren(result[0]);
+}
+
+function Trans(_ref) {
+  var children = _ref.children,
+      count = _ref.count,
+      parent = _ref.parent,
+      i18nKey = _ref.i18nKey,
+      context = _ref.context,
+      _ref$tOptions = _ref.tOptions,
+      tOptions = _ref$tOptions === void 0 ? {} : _ref$tOptions,
+      values = _ref.values,
+      defaults = _ref.defaults,
+      components = _ref.components,
+      ns = _ref.ns,
+      i18nFromProps = _ref.i18n,
+      tFromProps = _ref.t,
+      shouldUnescape = _ref.shouldUnescape,
+      additionalProps = (0,_babel_runtime_helpers_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__.default)(_ref, _excluded2);
+
+  var _ref2 = (0,react__WEBPACK_IMPORTED_MODULE_3__.useContext)(_context__WEBPACK_IMPORTED_MODULE_7__.I18nContext) || {},
+      i18nFromContext = _ref2.i18n,
+      defaultNSFromContext = _ref2.defaultNS;
+
+  var i18n = i18nFromProps || i18nFromContext || (0,_context__WEBPACK_IMPORTED_MODULE_7__.getI18n)();
+
+  if (!i18n) {
+    (0,_utils__WEBPACK_IMPORTED_MODULE_6__.warnOnce)('You will need to pass in an i18next instance by using i18nextReactModule');
+    return children;
+  }
+
+  var t = tFromProps || i18n.t.bind(i18n) || function (k) {
+    return k;
+  };
+
+  if (context) tOptions.context = context;
+
+  var reactI18nextOptions = _objectSpread(_objectSpread({}, (0,_context__WEBPACK_IMPORTED_MODULE_7__.getDefaults)()), i18n.options && i18n.options.react);
+
+  var namespaces = ns || t.ns || defaultNSFromContext || i18n.options && i18n.options.defaultNS;
+  namespaces = typeof namespaces === 'string' ? [namespaces] : namespaces || ['translation'];
+  var defaultValue = defaults || nodesToString(children, reactI18nextOptions) || reactI18nextOptions.transEmptyNodeValue || i18nKey;
+  var hashTransKey = reactI18nextOptions.hashTransKey;
+  var key = i18nKey || (hashTransKey ? hashTransKey(defaultValue) : defaultValue);
+  var interpolationOverride = values ? tOptions.interpolation : {
+    interpolation: _objectSpread(_objectSpread({}, tOptions.interpolation), {}, {
+      prefix: '#$?',
+      suffix: '?$#'
+    })
+  };
+
+  var combinedTOpts = _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, tOptions), {}, {
+    count: count
+  }, values), interpolationOverride), {}, {
+    defaultValue: defaultValue,
+    ns: namespaces
+  });
+
+  var translation = key ? t(key, combinedTOpts) : defaultValue;
+  var content = renderNodes(components || children, translation, i18n, reactI18nextOptions, combinedTOpts, shouldUnescape);
+  var useAsParent = parent !== undefined ? parent : reactI18nextOptions.defaultTransParent;
+  return useAsParent ? (0,react__WEBPACK_IMPORTED_MODULE_3__.createElement)(useAsParent, additionalProps, content) : content;
+}
+
+/***/ }),
+
 /***/ "./node_modules/react-i18next/dist/es/context.js":
 /*!*******************************************************!*\
   !*** ./node_modules/react-i18next/dist/es/context.js ***!
@@ -76401,6 +76640,37 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 84.475
 /***/ (function(module) {
 
 module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" title=\"arrow_right\" fill=\"#B1B5C4\" viewBox=\"0 0 16 16\"><path d=\"M6.528 5.195c-.26.26-.26.682 0 .943L8.39 8 6.528 9.862c-.26.26-.26.682 0 .943s.682.26.943 0l2.333-2.333c.26-.26.26-.682 0-.943L7.471 5.195c-.26-.26-.682-.26-.943 0z\"></path></svg>"
+
+/***/ }),
+
+/***/ "./node_modules/void-elements/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/void-elements/index.js ***!
+  \*********************************************/
+/***/ (function(module) {
+
+/**
+ * This file automatically generated from `pre-publish.js`.
+ * Do not manually edit.
+ */
+
+module.exports = {
+  "area": true,
+  "base": true,
+  "br": true,
+  "col": true,
+  "embed": true,
+  "hr": true,
+  "img": true,
+  "input": true,
+  "link": true,
+  "meta": true,
+  "param": true,
+  "source": true,
+  "track": true,
+  "wbr": true
+};
+
 
 /***/ }),
 

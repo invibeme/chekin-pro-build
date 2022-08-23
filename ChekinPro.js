@@ -7104,7 +7104,8 @@ function useGuestFormFields() {
               isEqual = false;
             }
           }
-        }
+        } // if (!isEqual) {
+
 
         for (var field in f) {
           var _f$field;
@@ -7113,7 +7114,8 @@ function useGuestFormFields() {
         }
 
         return _extends({}, current);
-      }
+      } // }
+
     });
   }, [f]);
 

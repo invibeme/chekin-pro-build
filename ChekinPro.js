@@ -3079,20 +3079,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _App_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.css */ "./src/App.css");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
-/* harmony import */ var _Routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Routes */ "./src/Routes.tsx");
-/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! history */ "./node_modules/history/index.js");
-/* harmony import */ var _context_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./context/index */ "./src/context/index.tsx");
+/* harmony import */ var _Routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Routes */ "./src/Routes.tsx");
+/* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! history */ "./node_modules/history/index.js");
+/* harmony import */ var _context_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./context/index */ "./src/context/index.tsx");
 
 
 
 
 
-
-var browserHistory = (0,history__WEBPACK_IMPORTED_MODULE_5__.createBrowserHistory)();
+var browserHistory = (0,history__WEBPACK_IMPORTED_MODULE_4__.createBrowserHistory)();
 
 function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_context_index__WEBPACK_IMPORTED_MODULE_4__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Routes__WEBPACK_IMPORTED_MODULE_3__.default, null));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_context_index__WEBPACK_IMPORTED_MODULE_3__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Routes__WEBPACK_IMPORTED_MODULE_2__.default, null));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (App);
@@ -8181,7 +8179,7 @@ function SummaryView() {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_common_NavBar__WEBPACK_IMPORTED_MODULE_1__.default, {
     title: t('confirm_booking_details')
-  }), "cc", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.SummaryContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.GuestPanel, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_GuestsList__WEBPACK_IMPORTED_MODULE_2__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.VerticalLineContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.VerticalLine, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.BookingPanel, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_BookingDetailsSection__WEBPACK_IMPORTED_MODULE_3__.default, null))));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.SummaryContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.GuestPanel, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_GuestsList__WEBPACK_IMPORTED_MODULE_2__.default, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.VerticalLineContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.VerticalLine, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styled__WEBPACK_IMPORTED_MODULE_4__.BookingPanel, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_BookingDetailsSection__WEBPACK_IMPORTED_MODULE_3__.default, null))));
 }
 
 
@@ -21591,49 +21589,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".App {\n  text-align: center;\n}\n\n.A
 
 /***/ }),
 
-/***/ "./src/index.css":
-/*!***********************!*\
-  !*** ./src/index.css ***!
-  \***********************/
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2__);
-// Imports
-
-
-
-var ___CSS_LOADER_URL_IMPORT_0___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-Black.ttf */ "./src/assets/fonts/Poppins-Black.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_1___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-ExtraBold.ttf */ "./src/assets/fonts/Poppins-ExtraBold.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_2___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-Bold.ttf */ "./src/assets/fonts/Poppins-Bold.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_3___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-SemiBold.ttf */ "./src/assets/fonts/Poppins-SemiBold.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_4___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-Medium.ttf */ "./src/assets/fonts/Poppins-Medium.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_5___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-Regular.ttf */ "./src/assets/fonts/Poppins-Regular.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_6___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-Light.ttf */ "./src/assets/fonts/Poppins-Light.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_URL_IMPORT_7___ = new URL(/* asset import */ __webpack_require__(/*! assets/fonts/Poppins-ExtraLight.ttf */ "./src/assets/fonts/Poppins-ExtraLight.ttf"), __webpack_require__.b);
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
-var ___CSS_LOADER_URL_REPLACEMENT_0___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_0___);
-var ___CSS_LOADER_URL_REPLACEMENT_1___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_1___);
-var ___CSS_LOADER_URL_REPLACEMENT_2___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_2___);
-var ___CSS_LOADER_URL_REPLACEMENT_3___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_3___);
-var ___CSS_LOADER_URL_REPLACEMENT_4___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_4___);
-var ___CSS_LOADER_URL_REPLACEMENT_5___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_5___);
-var ___CSS_LOADER_URL_REPLACEMENT_6___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_6___);
-var ___CSS_LOADER_URL_REPLACEMENT_7___ = _node_modules_css_loader_dist_runtime_getUrl_js__WEBPACK_IMPORTED_MODULE_2___default()(___CSS_LOADER_URL_IMPORT_7___);
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "@font-face {\n  font-family: Poppins;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 900;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_0___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-ExtraBold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 800;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_1___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Bold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 700;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_2___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-SemiBold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 600;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_3___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Medium;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 500;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_4___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Regular;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 400;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_5___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Light;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 300;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_6___ + ") format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-ExtraLight;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 200;\n  src: url(" + ___CSS_LOADER_URL_REPLACEMENT_7___ + ") format('truetype');\n}\n\nhtml,\nbody,\n#root {\n  height: 100%;\n  margin: 0;\n  font-family: 'Poppins-Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',\n    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  box-sizing: border-box;\n}\n\n.active-nav-link div {\n  color: #23262F;\n  font-weight: 600;\n}\n\n.active-nav-link div::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  display: block;\n  border-bottom: 2px solid #23262F;\n  bottom: -4px;\n}", "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA;EACE,oBAAoB;EACpB,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA2D;AAC7D;;AAEA;EACE,8BAA8B;EAC9B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA+D;AACjE;;AAEA;EACE,yBAAyB;EACzB,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA0D;AAC5D;;AAEA;EACE,6BAA6B;EAC7B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA8D;AAChE;;AAEA;EACE,2BAA2B;EAC3B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA4D;AAC9D;;AAEA;EACE,4BAA4B;EAC5B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA6D;AAC/D;;AAEA;EACE,0BAA0B;EAC1B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAA2D;AAC7D;;AAEA;EACE,+BAA+B;EAC/B,kBAAkB;EAClB,kBAAkB;EAClB,gBAAgB;EAChB,+DAAgE;AAClE;;AAEA;;;EAGE,YAAY;EACZ,SAAS;EACT;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;EAClC,sBAAsB;AACxB;;AAEA;EACE,cAAc;EACd,gBAAgB;AAClB;;AAEA;EACE,WAAW;EACX,kBAAkB;EAClB,WAAW;EACX,cAAc;EACd,gCAAgC;EAChC,YAAY;AACd","sourcesContent":["@font-face {\n  font-family: Poppins;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 900;\n  src: url(assets/fonts/Poppins-Black.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-ExtraBold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 800;\n  src: url(assets/fonts/Poppins-ExtraBold.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Bold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 700;\n  src: url(assets/fonts/Poppins-Bold.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-SemiBold;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 600;\n  src: url(assets/fonts/Poppins-SemiBold.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Medium;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 500;\n  src: url(assets/fonts/Poppins-Medium.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Regular;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 400;\n  src: url(assets/fonts/Poppins-Regular.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-Light;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 300;\n  src: url(assets/fonts/Poppins-Light.ttf) format('truetype');\n}\n\n@font-face {\n  font-family: Poppins-ExtraLight;\n  font-display: swap;\n  font-style: normal;\n  font-weight: 200;\n  src: url(assets/fonts/Poppins-ExtraLight.ttf) format('truetype');\n}\n\nhtml,\nbody,\n#root {\n  height: 100%;\n  margin: 0;\n  font-family: 'Poppins-Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',\n    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  box-sizing: border-box;\n}\n\n.active-nav-link div {\n  color: #23262F;\n  font-weight: 600;\n}\n\n.active-nav-link div::before {\n  content: \"\";\n  position: absolute;\n  width: 100%;\n  display: block;\n  border-bottom: 2px solid #23262F;\n  bottom: -4px;\n}"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/dist/runtime/api.js":
 /*!*****************************************************!*\
   !*** ./node_modules/css-loader/dist/runtime/api.js ***!
@@ -21742,45 +21697,6 @@ module.exports = function (cssWithMappingToString) {
   };
 
   return list;
-};
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/runtime/getUrl.js":
-/*!********************************************************!*\
-  !*** ./node_modules/css-loader/dist/runtime/getUrl.js ***!
-  \********************************************************/
-/***/ (function(module) {
-
-"use strict";
-
-
-module.exports = function (url, options) {
-  if (!options) {
-    options = {};
-  }
-
-  if (!url) {
-    return url;
-  }
-
-  url = String(url.__esModule ? url.default : url); // If url is already wrapped in quotes, remove them
-
-  if (/^['"].*['"]$/.test(url)) {
-    url = url.slice(1, -1);
-  }
-
-  if (options.hash) {
-    url += options.hash;
-  } // Should url be wrapped?
-  // See https://drafts.csswg.org/css-values-3/#urls
-
-
-  if (/["'() \t\n]|(%20)/.test(url) || options.needQuotes) {
-    return "\"".concat(url.replace(/"/g, '\\"').replace(/\n/g, "\\n"), "\"");
-  }
-
-  return url;
 };
 
 /***/ }),
@@ -76486,94 +76402,6 @@ module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" title=\"arrow_right\
 
 /***/ }),
 
-/***/ "./src/assets/fonts/Poppins-Black.ttf":
-/*!********************************************!*\
-  !*** ./src/assets/fonts/Poppins-Black.ttf ***!
-  \********************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "eacee5bb9c7fee5939ae.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-Bold.ttf":
-/*!*******************************************!*\
-  !*** ./src/assets/fonts/Poppins-Bold.ttf ***!
-  \*******************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "404e299be26d78e66794.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-ExtraBold.ttf":
-/*!************************************************!*\
-  !*** ./src/assets/fonts/Poppins-ExtraBold.ttf ***!
-  \************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "4ed78cd5d64af4efc3c7.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-ExtraLight.ttf":
-/*!*************************************************!*\
-  !*** ./src/assets/fonts/Poppins-ExtraLight.ttf ***!
-  \*************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "94b768c07879dde09ab4.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-Light.ttf":
-/*!********************************************!*\
-  !*** ./src/assets/fonts/Poppins-Light.ttf ***!
-  \********************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "f41b63c0bb0963ace821.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-Medium.ttf":
-/*!*********************************************!*\
-  !*** ./src/assets/fonts/Poppins-Medium.ttf ***!
-  \*********************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "9e1bb626874ed49aa343.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-Regular.ttf":
-/*!**********************************************!*\
-  !*** ./src/assets/fonts/Poppins-Regular.ttf ***!
-  \**********************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "8081832fc5cfbf634aa6.ttf";
-
-/***/ }),
-
-/***/ "./src/assets/fonts/Poppins-SemiBold.ttf":
-/*!***********************************************!*\
-  !*** ./src/assets/fonts/Poppins-SemiBold.ttf ***!
-  \***********************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-module.exports = __webpack_require__.p + "cce5625b56ec678e4202.ttf";
-
-/***/ }),
-
 /***/ "./src/translations/checkinOnlineTextsEN.json":
 /*!****************************************************!*\
   !*** ./src/translations/checkinOnlineTextsEN.json ***!
@@ -76623,9 +76451,6 @@ module.exports = JSON.parse("{\"documents\":{\"passport\":\"Pasaporte\",\"identi
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
@@ -76687,55 +76512,6 @@ module.exports = JSON.parse("{\"documents\":{\"passport\":\"Pasaporte\",\"identi
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
 /******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	!function() {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	!function() {
-/******/ 		__webpack_require__.b = document.baseURI || self.location.href;
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// Promise = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"main": 0
-/******/ 		};
-/******/ 		
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no deferred startup
-/******/ 		
-/******/ 		// no jsonp function
-/******/ 		
-/******/ 		// no deferred startup
 /******/ 	}();
 /******/ 	
 /************************************************************************/
